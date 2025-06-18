@@ -1,0 +1,51 @@
+# .clang-format - Java 风格 C++ 格式化配置（完整注释版）
+
+# 使用哪个风格作为基础，这里选择 LLVM（也可用 Google、Chromium 等）
+BasedOnStyle: LLVM
+
+# 缩进宽度为 4（一般 Java 风格）
+IndentWidth: 4
+
+# tab 替换为空格
+UseTab: Never
+
+# 每行最大字符数，超过会换行
+ColumnLimit: 200
+
+# 控制花括号的位置
+BreakBeforeBraces: Attach         # 函数和类的大括号不另起一行，贴在声明后（Java 风格）
+
+BraceWrapping:                    # 更细化地控制花括号换行行为
+  AfterClass: false               # 类定义的大括号不另起行
+  AfterControlStatement: false   # if/for/while/else 的大括号不另起行
+  AfterEnum: false               # 枚举定义的大括号不另起行
+  AfterFunction: false           # 函数定义的大括号不另起行
+  AfterNamespace: false          # 命名空间的大括号不另起行
+  AfterStruct: false             # struct 定义的大括号不另起行
+  AfterUnion: false              # union 定义的大括号不另起行
+  BeforeCatch: false             # catch 前不另起行
+  BeforeElse: false              # else 前不另起行
+
+# 控制简短语句是否允许写在一行
+AllowShortIfStatementsOnASingleLine: true    # 允许 if (...) return; 这种一行形式
+AllowShortLoopsOnASingleLine: false          # 不允许 while/for 单行写法
+AllowShortFunctionsOnASingleLine: None       # 所有函数体必须换行（你要求 Widget::~Widget() 换行）
+
+# 控制 include 排序
+SortIncludes: true
+
+# 空行控制
+MaxEmptyLinesToKeep: 1           # 最多保留 1 行空行
+
+# 对齐设置
+AlignConsecutiveAssignments: false    # 不纵向对齐多个赋值语句
+AlignConsecutiveDeclarations: false  # 不纵向对齐多个声明语句
+
+# 指针/引用符号的位置
+PointerAlignment: Left           # 指针符号靠左，如 int* ptr（Java 风格推荐）
+
+# 其他可选（视情况使用）：
+# KeepEmptyLinesAtTheStartOfBlocks: false
+# SpaceBeforeParens: ControlStatements    # 控制语句如 if 后是否加空格
+
+...
