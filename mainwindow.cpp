@@ -35,9 +35,14 @@ MainWindow::~MainWindow() {
 void MainWindow::createPro(bool) {
     qDebug() << "createPro";
     Wizard* wizard = new Wizard(this);
+    connect(wizard, &Wizard::sendProSetting, this, &MainWindow::recvProSetting);
     wizard->exec();
 }
 
 void MainWindow::openPro(bool) {
     qDebug() << "openPro";
+}
+
+void MainWindow::recvProSetting(const QString& name, const QString& path) {
+    qDebug() << "recvProSetting: " << name << " " << path << Qt::endl;
 }

@@ -15,9 +15,10 @@ class MainWindow : public QMainWindow {
   public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-  public slots:
+  private slots:
     void createPro(bool);
     void openPro(bool);
+    void recvProSetting(const QString& name, const QString& path);
 
   private:
     Ui::MainWindow* ui;
