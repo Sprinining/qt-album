@@ -11,16 +11,16 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     // 增加文件菜单
     QMenu* menu_file = menuBar()->addMenu(tr("文件(&F)"));
     QAction* act_create_pro = new QAction(QIcon(":/icons/createpro.png"), tr("创建项目"), this);
-    act_create_pro->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    act_create_pro->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
     menu_file->addAction(act_create_pro);
     QAction* act_open_pro = new QAction(QIcon(":/icons/openpro.png"), tr("打开项目"), this);
-    act_open_pro->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+    act_open_pro->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
     menu_file->addAction(act_open_pro);
 
     // 增加设置菜单
     QMenu* menu_set = menuBar()->addMenu(tr("设置(&S)"));
     QAction* act_music = new QAction(QIcon(":/icons/music.png"), tr("背景音乐"), this);
-    act_music->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    act_music->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
     menu_set->addAction(act_music);
 
     // 连接槽函数
@@ -34,7 +34,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::createPro(bool) {
     qDebug() << "createPro";
-    Wizard *wizard = new Wizard(this);
+    Wizard* wizard = new Wizard(this);
     wizard->exec();
 }
 
