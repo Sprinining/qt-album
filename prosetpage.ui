@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="labelName">
      <property name="text">
-      <string>Name:</string>
+      <string>项目名称 &lt;font color='red'&gt;*&lt;/font&gt;</string>
      </property>
     </widget>
    </item>
@@ -27,7 +27,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="labelPath">
      <property name="text">
-      <string>Path:</string>
+      <string>项目路径 &lt;font color='red'&gt;*&lt;/font&gt;</string>
      </property>
     </widget>
    </item>
@@ -37,14 +37,14 @@
    <item row="1" column="2">
     <widget class="QPushButton" name="pushButtonBrowse">
      <property name="text">
-      <string>browse</string>
+      <string>浏览</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
     <widget class="QLabel" name="labelTips">
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
