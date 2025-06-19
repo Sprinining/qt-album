@@ -44,6 +44,11 @@ AlignConsecutiveDeclarations: false  # 不纵向对齐多个声明语句
 # 指针/引用符号的位置
 PointerAlignment: Left           # 指针符号靠左，如 int* ptr（Java 风格推荐）
 
+# 防止函数参数挤成一行，保持每个参数单独一行（适用于 QFileDialog::getExistingDirectory 这种格式）
+AllowAllArgumentsOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+
 # 其他可选（视情况使用）：
 # KeepEmptyLinesAtTheStartOfBlocks: false
 # SpaceBeforeParens: ControlStatements    # 控制语句如 if 后是否加空格
