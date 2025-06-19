@@ -9,6 +9,9 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+// 只需前向声明即可，避免头文件耦合
+class ProTreeDialog;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -18,9 +21,9 @@ class MainWindow : public QMainWindow {
   private slots:
     void createPro(bool);
     void openPro(bool);
-    void recvProSetting(const QString& name, const QString& path);
 
   private:
     Ui::MainWindow* ui;
+    ProTreeDialog* protree_dialog;
 };
 #endif // MAINWINDOW_H
