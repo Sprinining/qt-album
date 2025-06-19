@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>Wizard</string>
   </property>
-  <widget class="ProSetPage" name="wizardPage1"/>
-  <widget class="ConfirmPage" name="wizardPage2"/>
+  <widget class="ProSetPage" name="wizardPagePorSet"/>
+  <widget class="ConfirmPage" name="wizardPageConfirm"/>
  </widget>
  <customwidgets>
   <customwidget>
