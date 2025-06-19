@@ -1,6 +1,7 @@
 #include "prosetpage.h"
 #include "ui_prosetpage.h"
 #include <QDir>
+#include <QFileDialog>
 #include <QLineEdit>
 
 ProSetPage::ProSetPage(QWidget* parent) : QWizardPage(parent), ui(new Ui::ProSetPage) {
@@ -30,6 +31,11 @@ ProSetPage::ProSetPage(QWidget* parent) : QWizardPage(parent), ui(new Ui::ProSet
 
 ProSetPage::~ProSetPage() {
     delete ui;
+}
+
+void ProSetPage::getProSetting(QString& name, QString& path) {
+    name = ui->lineEditName->text().trimmed();
+    path = ui->lineEditPath->text().trimmed();
 }
 
 // 通用输入验证函数
@@ -78,4 +84,31 @@ bool ProSetPage::isComplete() const {
     // 正确的做法是将 UI 提示的更新放到槽函数中（例如 textEdited 触发的 checkInput()），
     // 在那里修改 UI 并发出 completeChanged() 信号通知向导状态变化。
     return validateInput() == Valid;
+}
+
+void ProSetPage::on_pushButtonBrowse_clicked() {
+    // 获取当前 lineEdit 中的路径作为初始目录（用户可能已经手动输入了）
+    QString currentPath = ui->lineEditPath->text().trimmed();
+
+    // 如果输入为空或目录不存在，则使用当前工作目录作为备选默认路径
+    if (currentPath.isEmpty() || !QDir(currentPath).exists()) {
+        currentPath = QDir::currentPath(); // fallback 默认当前工作目录
+    }
+
+    // 打开系统文件夹选择对话框，让用户选择一个文件夹路径
+    QString selectedDir = QFileDialog::getExistingDirectory(this,                                // 父窗口
+                                                            tr("选择导入的文件夹"),              // 对话框标题
+                                                            currentPath,                         // 默认打开的路径
+                                                            QFileDialog::ShowDirsOnly |          // 只显示目录（不显示文件）
+                                                                QFileDialog::DontResolveSymlinks // 保留符号链接原样
+    );
+
+    // 如果用户取消选择，selectedDir 会是空字符串，此时无需处理
+    if (selectedDir.isEmpty()) return;
+
+    // 打印用户选择的目录路径，便于调试
+    qDebug() << "Selected directory:" << selectedDir;
+
+    // 将选择的路径填充到 UI 的 lineEditPath 中
+    ui->lineEditPath->setText(selectedDir);
 }

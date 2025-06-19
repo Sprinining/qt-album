@@ -13,11 +13,15 @@ class ProSetPage : public QWizardPage {
   public:
     explicit ProSetPage(QWidget* parent = nullptr);
     ~ProSetPage();
+    void getProSetting(QString& name, QString& path);
 
+  protected:
     bool isComplete() const override;
 
   private slots:
     void checkInput(); // 实时检查输入，更新提示
+
+    void on_pushButtonBrowse_clicked();
 
   private:
     // 使用枚举类型 InputStatus 来表示输入校验的不同状态，
