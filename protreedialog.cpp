@@ -1,0 +1,15 @@
+#include "protreedialog.h"
+#include "ui_protreedialog.h"
+
+ProTreeDialog::ProTreeDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ProTreeDialog) {
+    ui->setupUi(this);
+}
+
+ProTreeDialog::~ProTreeDialog() {
+    delete ui;
+}
+
+void ProTreeDialog::recvProSetting(const QString& name, const QString& path) {
+    qDebug() << "recvProSetting: " << name << " " << path << Qt::endl;
+    ui->treeWidget->addProToTree(name, path);
+}
