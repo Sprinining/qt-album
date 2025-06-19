@@ -39,7 +39,7 @@ void ProSetPage::getProSetting(QString& name, QString& path) {
 }
 
 // 通用输入验证函数
-ProSetPage::InputStatus ProSetPage::validateInput() const {
+InputStatus ProSetPage::validateInput() const {
     const QString name = ui->lineEditName->text().trimmed();
     const QString path = ui->lineEditPath->text().trimmed();
 
