@@ -111,4 +111,7 @@ void ProSetPage::on_pushButtonBrowse_clicked() {
 
     // 将选择的路径填充到 UI 的 lineEditPath 中
     ui->lineEditPath->setText(selectedDir);
+
+    // 立即校验输入，刷新提示和向导按钮状态
+    checkInput();
 }
