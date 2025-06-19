@@ -24,6 +24,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         icons.qrc
+        wizard.h wizard.cpp wizard.ui
+        prosetpage.h prosetpage.cpp prosetpage.ui
+        confirmpage.h confirmpage.cpp confirmpage.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET album APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

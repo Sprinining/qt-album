@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "wizard.h"
 #include <QAction>
 #include <QDebug>
 #include <QMenu>
@@ -33,6 +34,8 @@ MainWindow::~MainWindow() {
 
 void MainWindow::createPro(bool) {
     qDebug() << "createPro";
+    Wizard *wizard = new Wizard(this);
+    wizard->exec();
 }
 
 void MainWindow::openPro(bool) {
