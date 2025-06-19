@@ -27,6 +27,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         wizard.h wizard.cpp wizard.ui
         prosetpage.h prosetpage.cpp prosetpage.ui
         confirmpage.h confirmpage.cpp confirmpage.ui
+        protreedialog.h protreedialog.cpp protreedialog.ui
+        protreewidget.h protreewidget.cpp
+        protreeitem.h protreeitem.cpp
+        consts.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET album APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
