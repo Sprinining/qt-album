@@ -1,6 +1,7 @@
 #ifndef PROTREEWIDGET_H
 #define PROTREEWIDGET_H
 
+#include <QAction>
 #include <QTreeWidget>
 
 class ProTreeWidget : public QTreeWidget {
@@ -13,9 +14,18 @@ class ProTreeWidget : public QTreeWidget {
     void addProToTree(const QString& name, const QString& path);
 
   signals:
+  private slots:
+    void onItemPressed(QTreeWidgetItem* item, int column);
+    void import();
+
   private:
     // 用于记录已经添加过的完整路径，防止重复添加
     QSet<QString> set_path;
+    QAction* act_import;
+    QAction* act_set_start;
+    QAction* act_close_pro;
+    QAction* act_slide_show;
+    QTreeWidgetItem *right_btn_item;
 };
 
 #endif // PROTREEWIDGET_H
