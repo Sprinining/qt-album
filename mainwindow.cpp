@@ -46,8 +46,6 @@ MainWindow::~MainWindow() {
 
 // 创建项目按钮的槽函数
 void MainWindow::createPro(bool) {
-    qDebug() << "createPro";
-
     // 创建向导窗口（Wizard），用于输入项目名和路径
     Wizard* wizard = new Wizard(this);
 

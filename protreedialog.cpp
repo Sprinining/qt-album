@@ -3,6 +3,7 @@
 
 ProTreeDialog::ProTreeDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ProTreeDialog) {
     ui->setupUi(this);
+    ui->treeWidget->setHeaderLabels(QStringList() << "项目名称" << "路径");
 }
 
 ProTreeDialog::~ProTreeDialog() {
@@ -10,6 +11,5 @@ ProTreeDialog::~ProTreeDialog() {
 }
 
 void ProTreeDialog::recvProSetting(const QString& name, const QString& path) {
-    qDebug() << "recvProSetting: " << name << " " << path << Qt::endl;
     ui->treeWidget->addProToTree(name, path);
 }
