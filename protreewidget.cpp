@@ -48,7 +48,7 @@ void ProTreeWidget::addProToTree(const QString& name, const QString& path) {
     set_path.insert(file_path);
 
     // 创建自定义项目节点并添加到树上（以此树控件为父）
-    auto* item = new ProTreeItem(this, name, file_path, TreeItemPro);
+    auto* item = new ProTreeItem(this, name, file_path, AppConsts::TreeItemType::Project);
 
     // 设置显示文本（第0列）s
     item->setData(0, Qt::DisplayRole, name);
@@ -68,7 +68,7 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem* item, int column) {
     if (!item) return;
 
     // 只处理自定义项目节点（类型为 TreeItemPro）
-    if (item->type() != TreeItemPro) return;
+    if (item->type() != static_cast<int>(AppConsts::TreeItemType::Project)) return;
 
     // 记录当前右键点击的项（用于后续槽函数中定位上下文）
     right_btn_item = item;

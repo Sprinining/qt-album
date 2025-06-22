@@ -1,6 +1,5 @@
-#ifndef PROTREEITEM_H
-#define PROTREEITEM_H
-
+#pragma once
+#include "consts.h"
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
@@ -8,10 +7,10 @@
 class ProTreeItem : public QTreeWidgetItem {
   public:
     // 创建顶层节点，指定树控件指针、节点显示名称、路径和节点类型
-    ProTreeItem(QTreeWidget* treeview, const QString& name, const QString& path, int type = Type);
+    ProTreeItem(QTreeWidget* treeview, const QString& name, const QString& path, AppConsts::TreeItemType type = AppConsts::TreeItemType::Project);
 
     // 创建子节点，指定父节点、节点显示名称、路径、根节点指针和节点类型
-    ProTreeItem(QTreeWidgetItem* parent, const QString& name, const QString& path, QTreeWidgetItem* root, int type = Type);
+    ProTreeItem(QTreeWidgetItem* parent, const QString& name, const QString& path, QTreeWidgetItem* root, AppConsts::TreeItemType type = AppConsts::TreeItemType::Project);
 
     const QString& getPath() const;               // 获取该节点关联的路径
     const QTreeWidgetItem* getRoot() const;       // 获取根节点指针（根节点可用于查找或定位项目树起点）
@@ -30,5 +29,3 @@ class ProTreeItem : public QTreeWidgetItem {
     QTreeWidgetItem* item_prev; // 前一个兄弟节点（用于链表式遍历或自定义导航）
     QTreeWidgetItem* item_next; // 下一个兄弟节点（同上）
 };
-
-#endif // PROTREEITEM_H

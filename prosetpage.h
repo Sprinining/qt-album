@@ -25,7 +25,7 @@ class ProSetPage : public QWizardPage {
     void on_pushButtonBrowse_clicked();
 
   private:
-    InputStatus validateInput() const; // 共用输入校验逻辑
+    AppConsts::InputStatus validateInput() const; // 共用输入校验逻辑
 
   private:
     Ui::ProSetPage* ui;

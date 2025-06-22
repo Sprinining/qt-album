@@ -39,34 +39,34 @@ void ProSetPage::getProSetting(QString& name, QString& path) {
 }
 
 // 通用输入验证函数
-InputStatus ProSetPage::validateInput() const {
+AppConsts::InputStatus ProSetPage::validateInput() const {
     const QString name = ui->lineEditName->text().trimmed();
     const QString path = ui->lineEditPath->text().trimmed();
 
-    if (name.isEmpty() || path.isEmpty()) return EmptyField;
+    if (name.isEmpty() || path.isEmpty()) return AppConsts::InputStatus::EmptyField;
 
     QDir dir(path);
-    if (!dir.exists()) return PathNotExist;
+    if (!dir.exists()) return AppConsts::InputStatus::PathNotExist;
 
     QString projectPath = dir.absoluteFilePath(name);
-    if (QDir(projectPath).exists()) return ProjectExists;
+    if (QDir(projectPath).exists()) return AppConsts::InputStatus::ProjectExists;
 
-    return Valid;
+    return AppConsts::InputStatus::Valid;
 }
 
 // 根据输入状态实时更新提示
 void ProSetPage::checkInput() {
     switch (validateInput()) {
-    case EmptyField:
+    case AppConsts::InputStatus::EmptyField:
         ui->labelTips->setText("项目名称和路径不能为空");
         break;
-    case PathNotExist:
+    case AppConsts::InputStatus::PathNotExist:
         ui->labelTips->setText("项目路径不存在");
         break;
-    case ProjectExists:
+    case AppConsts::InputStatus::ProjectExists:
         ui->labelTips->setText("该项目路径已存在");
         break;
-    case Valid:
+    case AppConsts::InputStatus::Valid:
         ui->labelTips->setText("");
         break;
     }
@@ -83,7 +83,7 @@ bool ProSetPage::isComplete() const {
     //
     // 正确的做法是将 UI 提示的更新放到槽函数中（例如 textEdited 触发的 checkInput()），
     // 在那里修改 UI 并发出 completeChanged() 信号通知向导状态变化。
-    return validateInput() == Valid;
+    return validateInput() == AppConsts::InputStatus::Valid;
 }
 
 void ProSetPage::on_pushButtonBrowse_clicked() {
