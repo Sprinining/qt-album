@@ -53,4 +53,7 @@ BinPackParameters: false
 # KeepEmptyLinesAtTheStartOfBlocks: false
 # SpaceBeforeParens: ControlStatements    # 控制语句如 if 后是否加空格
 
+NamespaceIndentation: All
+
+
 ...
