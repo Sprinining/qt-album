@@ -22,7 +22,7 @@ void Wizard::done(int result) {
     ui->wizardPagePorSet->getProSetting(name, path);
 
     // 发送自定义信号，传递项目设置数据给外部
-    emit sendProSetting(name, path);
+    emit projectSettingChanged(name, path);
 
     // 调用基类 done() 以完成向导关闭操作
     QWizard::done(result);

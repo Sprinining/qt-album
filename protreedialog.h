@@ -20,12 +20,12 @@ private:
 
 public slots:
     /**
-   * @brief recvProSetting 接收项目设置信息的槽函数
+   * @brief onProjectSettingChanged 接收项目设置信息的槽函数
    *        通常由创建向导窗口（如 Wizard）发送信号触发，用于初始化项目树显示
    * @param name 项目名称
    * @param path 项目路径
    */
-    void recvProSetting(const QString &name, const QString &path);
+    void onProjectSettingChanged(const QString &name, const QString &path);
 };
 
 #endif // PROTREEDIALOG_H

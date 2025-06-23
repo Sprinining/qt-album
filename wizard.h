@@ -25,7 +25,7 @@ private:
 signals:
     // 自定义信号，发送项目名称和路径字符串
     // 这里参数使用传值，安全且高效（QString 隐式共享）
-    void sendProSetting(QString name, QString path);
+    void projectSettingChanged(QString name, QString path);
 };
 
 #endif // WIZARD_H

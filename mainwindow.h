@@ -21,10 +21,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    // 屏幕左侧的项目树对话框
     ProTreeDialog *protree_dialog_;
 
 private slots:
-    void createPro(bool);
-    void openPro(bool);
+    // 创建项目按钮的槽函数
+    void createProject(bool);
+    // 打开项目按钮的槽函数
+    void openProject(bool);
 };
 #endif // MAINWINDOW_H

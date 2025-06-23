@@ -9,6 +9,6 @@ ProTreeDialog::ProTreeDialog(QWidget *parent)
 
 ProTreeDialog::~ProTreeDialog() { delete ui; }
 
-void ProTreeDialog::recvProSetting(const QString &name, const QString &path) {
+void ProTreeDialog::onProjectSettingChanged(const QString &name, const QString &path) {
     ui->treeWidget->addProToTree(name, path);
 }

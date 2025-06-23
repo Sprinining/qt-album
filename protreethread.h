@@ -2,14 +2,14 @@
 #define PROTREETHREAD_H
 
 #include <QThread>
+#include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-// 项目图片导入构建线程（递归构建图片目录树，并更新 UI）
+// 项目图片导入构建线程（在后台递归构建图片目录树并更新 UI）
 class ProTreeThread : public QThread {
     Q_OBJECT
 
 public:
-    // 构造函数：初始化路径、树结构信息、计数器等
     ProTreeThread(const QString &src_path,      // 源路径
                   const QString &dist_path,     // 目标路径
                   QTreeWidgetItem *parent_item, // 父节点（用于添加子项）
@@ -18,34 +18,35 @@ public:
                   QTreeWidgetItem *root,        // 根节点
                   QObject *parent = nullptr);   // Qt 所需父对象
 
-    ~ProTreeThread();
+    ~ProTreeThread(); // 析构函数
 
 protected:
-    // 重写 run()：线程入口函数
-    void run() override;
+    void run() override; // 重写 QThread 的入口函数
 
 private:
-    // 递归创建项目树
-    void createProTree(const QString &src_path, const QString &dist_path,
-                       QTreeWidgetItem *parent_item, int &file_count,
-                       QTreeWidget *self, QTreeWidgetItem *root,
-                       QTreeWidgetItem *prev = nullptr);
+    void createProTree(
+        const QString &src_path,          // 当前扫描的源路径
+        const QString &dist_path,         // 当前目标路径
+        QTreeWidgetItem *parent_item,     // 当前目录对应的父节点
+        int &file_count,                  // 累计图片数（引用传参）
+        QTreeWidget *self,                // 指向树控件自身
+        QTreeWidgetItem *root,            // 根节点
+        QTreeWidgetItem *prev = nullptr); // 前一个兄弟节点，用于建立链表关系
 
-    // 成员变量（缓存参数）
-    QString src_path_;
-    QString dist_path_;
-    int file_count_;
-    QTreeWidgetItem *parent_item_;
-    QTreeWidgetItem *root_;
-    QTreeWidget *self_;
-    bool stop_ = false;
+    QString src_path_;             // 源路径
+    QString dist_path_;            // 目标路径
+    int file_count_;               // 文件计数
+    QTreeWidgetItem *parent_item_; // 父节点指针
+    QTreeWidgetItem *root_;        // 根节点指针
+    QTreeWidget *self_;            // 树控件自身指针
+    bool stop_ = false;            // 停止标志（用于取消操作）
 
 public slots:
-    void cancelProgress();
+    void cancelProgress(); // 用户取消时调用
 
 signals:
-    void updateProgress(int); // 发送进度更新信号
-    void finishProgress(int); // 发送完成信号
+    void updateProgress(int); // 更新进度
+    void finishProgress(int); // 完成构建
 };
 
 #endif // PROTREETHREAD_H
