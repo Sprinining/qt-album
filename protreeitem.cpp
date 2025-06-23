@@ -31,10 +31,10 @@ const ProTreeItem* ProTreeItem::getFirstItemChild() const {
 const ProTreeItem* ProTreeItem::getLastItemChild() const {
 }
 
-void ProTreeItem::setItemPrev(ProTreeItem* prev) {
+void ProTreeItem::setItemPrev(QTreeWidgetItem* prev) {
     item_prev = prev;
 }
 
-void ProTreeItem::setItemNext(ProTreeItem* next) {
+void ProTreeItem::setItemNext(QTreeWidgetItem* next) {
     item_next = next;
 }

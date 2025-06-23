@@ -19,8 +19,8 @@ class ProTreeItem : public QTreeWidgetItem {
     const ProTreeItem* getFirstItemChild() const; // 获取第一个子节点
     const ProTreeItem* getLastItemChild() const;  // 获取最后一个子节点
 
-    void setItemPrev(ProTreeItem* prev); // 设置前一个兄弟节点
-    void setItemNext(ProTreeItem* next); // 设置下一个兄弟节点
+    void setItemPrev(QTreeWidgetItem* prev); // 设置前一个兄弟节点
+    void setItemNext(QTreeWidgetItem* next); // 设置下一个兄弟节点
 
   private:
     QString path;               // 节点对应的路径（通常用于表示文件/目录路径）
