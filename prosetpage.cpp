@@ -18,20 +18,20 @@ ProSetPage::ProSetPage(QWidget *parent)
 
 ProSetPage::~ProSetPage() { delete ui; }
 
-void ProSetPage::getProjectSetting(QString &name, QString &path) const {
+void ProSetPage::getProjectSetting(QString &name, QString &dir_path) const {
     name = ui->lineEditName->text().trimmed();
-    path = ui->lineEditPath->text().trimmed();
+    dir_path = ui->lineEditPath->text().trimmed();
 }
 
 // 通用输入验证函数
 AppConsts::InputStatus ProSetPage::validateInput() const {
     const QString name = ui->lineEditName->text().trimmed();
-    const QString path = ui->lineEditPath->text().trimmed();
+    const QString dir_path = ui->lineEditPath->text().trimmed();
 
-    if (name.isEmpty() || path.isEmpty())
+    if (name.isEmpty() || dir_path.isEmpty())
         return AppConsts::InputStatus::EmptyField;
 
-    QDir dir(path);
+    QDir dir(dir_path);
     if (!dir.exists())
         return AppConsts::InputStatus::PathNotExist;
 
@@ -96,18 +96,18 @@ bool ProSetPage::isComplete() const {
 
 void ProSetPage::on_pushButtonBrowse_clicked() {
     // 获取当前 lineEdit 中的路径作为初始目录
-    QString cur_path = ui->lineEditPath->text().trimmed();
+    QString dir_path = ui->lineEditPath->text().trimmed();
 
     // 如果输入为空或目录不存在，则使用当前工作目录作为备选默认路径
-    if (cur_path.isEmpty() || !QDir(cur_path).exists()) {
-        cur_path = QDir::currentPath();
+    if (dir_path.isEmpty() || !QDir(dir_path).exists()) {
+        dir_path = QDir::currentPath();
     }
 
     // 打开系统文件夹选择对话框，让用户选择一个文件夹路径
     QString selected_dir = QFileDialog::getExistingDirectory(
         this,                                // 父窗口
         tr("选择导入的文件夹"),              // 对话框标题
-        cur_path,                            // 默认打开的路径
+        dir_path,                            // 默认打开的路径
         QFileDialog::ShowDirsOnly |          // 只显示目录（不显示文件）
             QFileDialog::DontResolveSymlinks // 保留符号链接原样
         );

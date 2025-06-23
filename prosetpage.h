@@ -15,7 +15,7 @@ public:
     explicit ProSetPage(QWidget *parent = nullptr);
     ~ProSetPage();
     // 返回从向导页获得的信息
-    void getProjectSetting(QString &name, QString &path) const;
+    void getProjectSetting(QString &name, QString &dir_path) const;
 
 protected:
     // 用于确定“下一步”或“完成”按钮是否应该被启用或禁用

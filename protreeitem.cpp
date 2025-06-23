@@ -2,17 +2,17 @@
 
 // 调用基类构造，treeview 是父对象，节点自动加入树中
 ProTreeItem::ProTreeItem(QTreeWidget *treeview, const QString &name,
-                         const QString &path, AppConsts::TreeItemType type)
-    : QTreeWidgetItem(treeview, static_cast<int>(type)), path_(path),
+                         const QString &file_path, AppConsts::TreeItemType type)
+    : QTreeWidgetItem(treeview, static_cast<int>(type)), file_path_(file_path),
     name_(name), item_root_(this), item_prev_(nullptr), item_next_(nullptr) {}
 // 父节点parent作为父对象，加入父节点的子列表
 ProTreeItem::ProTreeItem(ProTreeItem *parent, const QString &name,
-                         const QString &path, ProTreeItem *root,
+                         const QString &file_path, ProTreeItem *root,
                          AppConsts::TreeItemType type)
-    : QTreeWidgetItem(parent, static_cast<int>(type)), path_(path), name_(name),
-    item_root_(root), item_prev_(nullptr), item_next_(nullptr) {}
+    : QTreeWidgetItem(parent, static_cast<int>(type)), file_path_(file_path),
+    name_(name), item_root_(root), item_prev_(nullptr), item_next_(nullptr) {}
 
-const QString &ProTreeItem::getPath() const { return path_; }
+const QString &ProTreeItem::getFilePath() const { return file_path_; }
 
 const QTreeWidgetItem *ProTreeItem::getRoot() const { return item_root_; }
 

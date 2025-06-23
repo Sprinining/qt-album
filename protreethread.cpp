@@ -21,7 +21,7 @@ void ProTreeThread::run() {
     createProTree(src_path_, dist_path_, parent_item_, file_count_, self_, root_);
 
     if (stop_) {
-        auto path = dynamic_cast<ProTreeItem *>(root_)->getPath();
+        auto path = dynamic_cast<ProTreeItem *>(root_)->getFilePath();
         auto index = self_->indexOfTopLevelItem(root_);
         delete self_->takeTopLevelItem(index);
         QDir dir(path);

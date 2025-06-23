@@ -17,11 +17,11 @@ void Wizard::done(int result) {
     }
 
     // 向导成功完成时，获取项目名称和路径
-    QString name, path;
-    ui->wizardPagePorSet->getProjectSetting(name, path);
+    QString name, dir_path;
+    ui->wizardPagePorSet->getProjectSetting(name, dir_path);
 
     // 发送信号给项目树对话框，传递项目的设置
-    emit projectSettingChanged(name, path);
+    emit projectSettingChanged(name, dir_path);
 
     // 调用基类 done() 以完成向导关闭操作
     QWizard::done(result);
