@@ -3,7 +3,7 @@
 
 ProTreeDialog::ProTreeDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ProTreeDialog) {
     ui->setupUi(this);
-    ui->treeWidget->setHeaderLabels(QStringList() << "项目名称" << "路径");
+    ui->treeWidget->setHeaderLabels(QStringList() << "项目名称");
 }
 
 ProTreeDialog::~ProTreeDialog() {
