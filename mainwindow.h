@@ -26,8 +26,8 @@ private:
 
 private slots:
     // 创建项目按钮的槽函数
-    void createProject(bool);
+    void onCreateProject(bool);
     // 打开项目按钮的槽函数
-    void openProject(bool);
+    void onOpenProject(bool);
 };
 #endif // MAINWINDOW_H

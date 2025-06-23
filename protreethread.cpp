@@ -30,7 +30,7 @@ void ProTreeThread::run() {
     }
 
     // 线程结束后发送完成信号
-    emit finishProgress(file_count_);
+    emit progressFinished(file_count_);
 }
 
 void ProTreeThread::createProTree(const QString &src_path,
@@ -58,7 +58,7 @@ void ProTreeThread::createProTree(const QString &src_path,
 
             if (stop_)
                 return;
-            emit updateProgress(file_count);
+            emit progressUpdated(file_count);
             QDir dist_dir(dist_path_);
             QString sub_dist_path = dist_dir.absoluteFilePath(file_info.fileName());
             QDir sub_dist_dir(sub_dist_path);
@@ -86,7 +86,7 @@ void ProTreeThread::createProTree(const QString &src_path,
             continue;
 
         file_count++;
-        emit updateProgress(file_count); // 发射进度信号
+        emit progressUpdated(file_count); // 发射进度信号
 
         QString dist_file_path = file_info.absoluteFilePath();
 
@@ -125,4 +125,4 @@ void ProTreeThread::createProTree(const QString &src_path,
     // 保留：后续可添加 name_filters 判断或递归目录构建
 }
 
-void ProTreeThread::cancelProgress() { this->stop_ = true; }
+void ProTreeThread::onProgressCanceled() { this->stop_ = true; }

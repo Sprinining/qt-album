@@ -9,6 +9,8 @@ ProTreeDialog::ProTreeDialog(QWidget *parent)
 
 ProTreeDialog::~ProTreeDialog() { delete ui; }
 
-void ProTreeDialog::onProjectSettingChanged(const QString &name, const QString &path) {
-    ui->treeWidget->addProToTree(name, path);
+void ProTreeDialog::onProjectSettingChanged(const QString &name,
+                                            const QString &path) {
+    // 根据路径和问价夹名称，导入项目树
+    ui->treeWidget->addProjectToTree(name, path);
 }

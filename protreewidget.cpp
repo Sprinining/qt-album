@@ -13,31 +13,29 @@ ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
     connect(this, &ProTreeWidget::itemPressed, this,
             &ProTreeWidget::onItemPressed);
 
-    // 导入文件动作
+    // 只初始化一次，节省资源，可以多次复用
+    // 菜单项：导入文件
     act_import_ = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
-    connect(act_import_, &QAction::triggered, this, &ProTreeWidget::import);
-
-    // 设置活动项目
+    connect(act_import_, &QAction::triggered, this, &ProTreeWidget::onImportProject);
+    // 菜单项：设置活动项目
     act_set_start_ =
         new QAction(QIcon(":/icons/core.png"), tr("设置活动项目"), this);
     // connect(act_set_start, &QAction::triggered, this,
     // &ProTreeWidget::setAsActive);
-
-    // 关闭项目
+    // 菜单项：关闭项目
     act_close_pro_ =
         new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
     // connect(act_close_pro, &QAction::triggered, this,
     // &ProTreeWidget::closeProject);
-
-    // 幻灯片播放
+    // 菜单项：幻灯片播放
     act_slide_show_ =
-        new QAction(QIcon(":/icons/slideshow.png"), tr("轮播图播放"), this);
+        new QAction(QIcon(":/icons/slideshow.png"), tr("幻灯片播放"), this);
     // connect(act_slide_show, &QAction::triggered, this,
     // &ProTreeWidget::startSlideshow);
 }
 
 // 添加一个项目节点到树形控件中
-void ProTreeWidget::addProToTree(const QString &name, const QString &path) {
+void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     // 拼接绝对路径（完整项目路径 = 路径 + 项目名）
     QDir dir(path);
     const QString file_path = dir.absoluteFilePath(name);
@@ -97,7 +95,7 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
     contextMenu.exec(QCursor::pos());
 }
 
-void ProTreeWidget::import() {
+void ProTreeWidget::onImportProject() {
     // 安全检查：未选中任何节点时直接返回，并使用默认路径
     if (!right_btn_item_)
         return;
@@ -132,25 +130,25 @@ void ProTreeWidget::import() {
     thread_create_pro_ = std::make_shared<ProTreeThread>(
         std::ref(importPath), std::ref(basePath), right_btn_item_, file_count,
         this, right_btn_item_, nullptr);
-    connect(thread_create_pro_.get(), &ProTreeThread::updateProgress, this,
-            &ProTreeWidget::updateProgress);
-    connect(thread_create_pro_.get(), &ProTreeThread::finishProgress, this,
-            &ProTreeWidget::finishProgress);
+    connect(thread_create_pro_.get(), &ProTreeThread::progressUpdated, this,
+            &ProTreeWidget::onProgressUpdated);
+    connect(thread_create_pro_.get(), &ProTreeThread::progressFinished, this,
+            &ProTreeWidget::onProgressFinished);
 
-    connect(this, &ProTreeWidget::cancelProgress, thread_create_pro_.get(),
-            &ProTreeThread::cancelProgress);
+    connect(this, &ProTreeWidget::progressCanceled, thread_create_pro_.get(),
+            &ProTreeThread::onProgressCanceled);
     thread_create_pro_->start();
 
     dialog_progress_ = new QProgressDialog(this);
     connect(dialog_progress_, &QProgressDialog::canceled, this,
-            &ProTreeWidget::canceled);
+            &ProTreeWidget::onProgressCanceled);
     dialog_progress_->setWindowTitle(tr("请等待..."));
     dialog_progress_->setFixedWidth(AppConsts::UIConfig::ProgressWidth);
     dialog_progress_->setRange(0, AppConsts::UIConfig::ProgressWidth);
     dialog_progress_->exec();
 }
 
-void ProTreeWidget::updateProgress(int count) {
+void ProTreeWidget::onProgressUpdated(int count) {
     if (!dialog_progress_)
         return;
     if (count >= AppConsts::UIConfig::ProgressMax) {
@@ -159,13 +157,13 @@ void ProTreeWidget::updateProgress(int count) {
     }
 }
 
-void ProTreeWidget::finishProgress() {
+void ProTreeWidget::onProgressFinished() {
     dialog_progress_->setValue(AppConsts::UIConfig::ProgressMax);
     dialog_progress_->deleteLater();
 }
 
-void ProTreeWidget::canceled() {
-    emit cancelProgress();
+void ProTreeWidget::onProgressCanceled() {
+    emit progressCanceled();
     delete dialog_progress_;
     dialog_progress_ = nullptr;
 }

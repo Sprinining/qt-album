@@ -27,9 +27,9 @@ ProSetPage::ProSetPage(QWidget *parent)
 
     // 文本变更时触发校验
     connect(ui->lineEditName, &QLineEdit::textEdited, this,
-            &ProSetPage::checkInput);
+            &ProSetPage::onCheckInput);
     connect(ui->lineEditPath, &QLineEdit::textEdited, this,
-            &ProSetPage::checkInput);
+            &ProSetPage::onCheckInput);
 }
 
 ProSetPage::~ProSetPage() { delete ui; }
@@ -58,7 +58,7 @@ AppConsts::InputStatus ProSetPage::validateInput() const {
     return AppConsts::InputStatus::Valid;
 }
 
-void ProSetPage::checkInput() {
+void ProSetPage::onCheckInput() {
     switch (validateInput()) {
     case AppConsts::InputStatus::EmptyField:
         ui->labelTips->setText("项目名称和路径不能为空");
@@ -116,5 +116,5 @@ void ProSetPage::on_pushButtonBrowse_clicked() {
     ui->lineEditPath->setText(selected_dir);
 
     // 立即校验输入，刷新提示和向导按钮状态
-    checkInput();
+    onCheckInput();
 }

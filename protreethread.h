@@ -42,11 +42,11 @@ private:
     bool stop_ = false;            // 停止标志（用于取消操作）
 
 public slots:
-    void cancelProgress(); // 用户取消时调用
+    void onProgressCanceled(); // 用户取消时调用
 
 signals:
-    void updateProgress(int); // 更新进度
-    void finishProgress(int); // 完成构建
+    void progressUpdated(int); // 更新进度
+    void progressFinished(int); // 完成构建
 };
 
 #endif // PROTREETHREAD_H

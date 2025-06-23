@@ -33,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 连接槽函数
     connect(action_create_pro, &QAction::triggered, this,
-            &MainWindow::createProject);
-    connect(action_open_pro, &QAction::triggered, this, &MainWindow::openProject);
+            &MainWindow::onCreateProject);
+    connect(action_open_pro, &QAction::triggered, this, &MainWindow::onOpenProject);
 
     // 初始化项目树对话框
     protree_dialog_ = new ProTreeDialog(this);
@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
-void MainWindow::createProject(bool) {
+void MainWindow::onCreateProject(bool) {
     // 创建向导窗口，用于输入项目名和路径
     Wizard *wizard = new Wizard(this);
     // 连接槽函数
@@ -52,4 +52,4 @@ void MainWindow::createProject(bool) {
     wizard->exec();
 }
 
-void MainWindow::openProject(bool) { qDebug() << "openPro"; }
+void MainWindow::onOpenProject(bool) { qDebug() << "openPro"; }

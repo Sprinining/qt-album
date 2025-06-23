@@ -29,7 +29,7 @@ private:
 
 private slots:
     // 实时检查输入，更新提示
-    void checkInput();
+    void onCheckInput();
     void on_pushButtonBrowse_clicked();
 };
 
