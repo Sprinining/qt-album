@@ -31,27 +31,22 @@ void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     // 加到 set 中，防止重复
     set_path_.insert(file_path);
 
-    // 创建自定义项目节点并添加到树上（以此树控件为父）
+    // 创建根节点（以此树控件为父）
     auto *item =
         new ProTreeItem(this, name, file_path, AppConsts::TreeItemType::Project);
-
-    // 设置显示文本（第0列）s
     item->setData(0, Qt::DisplayRole, name);
-
-    // 设置图标装饰（比如项目图标）
     item->setData(0, Qt::DecorationRole, QIcon(":/icons/dir.png"));
-
-    // 设置鼠标悬停提示
     item->setData(0, Qt::ToolTipRole, file_path);
 }
 
 void ProTreeWidget::initActions() {
-    act_import_ = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
-    act_set_start_ =
+    action_import_ =
+        new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
+    action_set_start_ =
         new QAction(QIcon(":/icons/core.png"), tr("设置活动项目"), this);
-    act_close_pro_ =
+    action_close_pro_ =
         new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
-    act_slide_show_ =
+    action_slide_show_ =
         new QAction(QIcon(":/icons/slideshow.png"), tr("幻灯片播放"), this);
 }
 
@@ -60,7 +55,7 @@ void ProTreeWidget::initSignals() {
     connect(this, &ProTreeWidget::itemPressed, this,
             &ProTreeWidget::onItemPressed);
 
-    connect(act_import_, &QAction::triggered, this,
+    connect(action_import_, &QAction::triggered, this,
             &ProTreeWidget::onImportProject);
 
     // connect(act_set_start, &QAction::triggered, this,
@@ -87,69 +82,85 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
         return;
 
     // 记录当前右键点击的项（用于后续槽函数中定位上下文）
-    right_btn_item_ = dynamic_cast<ProTreeItem *>(item);
+    right_clicked_item_ = dynamic_cast<ProTreeItem *>(item);
 
     // 创建右键菜单，并添加对应的操作项
-    QMenu contextMenu(this);
-    contextMenu.addAction(act_import_);     // 导入文件
-    contextMenu.addAction(act_set_start_);  // 设置为起始项目
-    contextMenu.addAction(act_close_pro_);  // 关闭项目
-    contextMenu.addAction(act_slide_show_); // 幻灯片浏览
+    QMenu menu(this);
+    menu.addAction(action_import_);     // 导入文件
+    menu.addAction(action_set_start_);  // 设置为起始项目
+    menu.addAction(action_close_pro_);  // 关闭项目
+    menu.addAction(action_slide_show_); // 幻灯片浏览
 
     // 在鼠标位置弹出菜单（阻塞直到用户操作）
-    contextMenu.exec(QCursor::pos());
+    menu.exec(QCursor::pos());
 }
 
 void ProTreeWidget::onImportProject() {
-    // 安全检查：未选中任何节点时直接返回，并使用默认路径
-    if (!right_btn_item_)
+    // 获取当前右键点击的项目节点
+    ProTreeItem *project_item = right_clicked_item_;
+    if (!project_item)
         return;
 
-    // 获取当前项目节点路径
-    ProTreeItem *proItem = dynamic_cast<ProTreeItem *>(right_btn_item_);
-    if (!proItem)
+    // 获取该节点的基础路径，作为导入的目标路径
+    const QString base_path = project_item->getFilePath();
+
+    // 弹出目录选择对话框，获取用户选择的导入路径
+    const QString import_path = selectImportDirectory(base_path);
+    if (import_path.isEmpty())
         return;
 
-    const QString basePath = proItem->getPath();
-
-    // 构造文件夹选择对话框
-    QFileDialog fileDialog(this); // 加 this 作为父窗口，防止窗口异常
-    fileDialog.setFileMode(QFileDialog::Directory);    // 只允许选择文件夹
-    fileDialog.setWindowTitle(tr("选择导入的文件夹")); // 设置窗口标题
-    fileDialog.setDirectory(basePath);                 // 设置初始目录
-    fileDialog.setViewMode(QFileDialog::Detail); // 设置详细视图（非图标模式）
-
-    // 获取用户选择结果
-    QStringList selectedDirs;
-    if (fileDialog.exec())
-        selectedDirs = fileDialog.selectedFiles();
-
-    // 用户取消或未选择目录
-    if (selectedDirs.isEmpty())
-        return;
-
-    // 获取第一个选中的路径
-    const QString importPath = selectedDirs.at(0);
+    // 初始化文件计数器，用于统计导入的文件数量
     int file_count = 0;
 
+    // 创建导入线程对象，传入导入路径、目标路径、当前节点等参数
     thread_create_pro_ = std::make_shared<ProTreeThread>(
-        std::ref(importPath), std::ref(basePath), right_btn_item_, file_count,
-        this, right_btn_item_, nullptr);
-    connect(thread_create_pro_.get(), &ProTreeThread::progressUpdated, this,
-            &ProTreeWidget::onProgressUpdated);
-    connect(thread_create_pro_.get(), &ProTreeThread::progressFinished, this,
-            &ProTreeWidget::onProgressFinished);
+        std::ref(import_path), std::ref(base_path), project_item, file_count,
+        this, project_item, nullptr);
 
-    connect(this, &ProTreeWidget::progressCanceled, thread_create_pro_.get(),
-            &ProTreeThread::onProgressCanceled);
+    // 连接导入线程的相关信号（进度更新、完成、取消等）
+    connectThreadSignals();
+
+    // 启动导入线程，开始执行导入任务
     thread_create_pro_->start();
 
+    // 显示导入进度对话框，支持取消操作
+    showProgressDialog();
+}
+
+QString ProTreeWidget::selectImportDirectory(const QString &initial_path) {
+
+    // 构造文件夹选择对话框
+    QFileDialog file_dialog(this); // 加 this 作为父窗口，防止窗口异常
+    file_dialog.setFileMode(QFileDialog::Directory);    // 只允许选择文件夹
+    file_dialog.setWindowTitle(tr("选择导入的文件夹")); // 设置窗口标题
+    file_dialog.setDirectory(initial_path);             // 设置初始目录
+    file_dialog.setViewMode(QFileDialog::Detail); // 设置详细视图（非图标模式）
+
+    if (file_dialog.exec())
+        return file_dialog.selectedFiles().value(0);
+
+    return QString();
+}
+void ProTreeWidget::connectThreadSignals() {
+    auto *thread = thread_create_pro_.get();
+
+    connect(thread, &ProTreeThread::progressUpdated, this,
+            &ProTreeWidget::onProgressUpdated);
+    connect(thread, &ProTreeThread::progressFinished, this,
+            &ProTreeWidget::onProgressFinished);
+    connect(this, &ProTreeWidget::progressCanceled, thread,
+            &ProTreeThread::onProgressCanceled);
+}
+
+void ProTreeWidget::showProgressDialog() {
     dialog_progress_ = new QProgressDialog(this);
-    connect(dialog_progress_, &QProgressDialog::canceled, this,
-            &ProTreeWidget::onProgressCanceled);
     dialog_progress_->setWindowTitle(tr("请等待..."));
     dialog_progress_->setFixedWidth(AppConsts::UIConfig::ProgressWidth);
     dialog_progress_->setRange(0, AppConsts::UIConfig::ProgressWidth);
+
+    connect(dialog_progress_, &QProgressDialog::canceled, this,
+            &ProTreeWidget::onProgressCanceled);
+
     dialog_progress_->exec();
 }
 
