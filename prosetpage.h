@@ -26,6 +26,8 @@ private:
 
     // 共用输入校验逻辑
     AppConsts::InputStatus validateInput() const;
+    void initUI();
+    void initSignals();
 
 private slots:
     // 实时检查输入，更新提示

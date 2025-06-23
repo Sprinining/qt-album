@@ -7,29 +7,13 @@
 ProSetPage::ProSetPage(QWidget *parent)
     : QWizardPage(parent), ui(new Ui::ProSetPage) {
     ui->setupUi(this);
-    setTitle(tr("设置项目配置"));
-
-    // 设置提示标签字体颜色为红色
-    ui->labelTips->setStyleSheet("color: red;");
 
     // 注册字段，带 * 表示必须填写
     registerField("projectName*", ui->lineEditName);
     registerField("projectPath*", ui->lineEditPath);
 
-    // 设置默认路径为当前目录
-    QString cur_path = QDir::currentPath();
-    ui->lineEditPath->setText(cur_path);
-    ui->lineEditPath->setCursorPosition(ui->lineEditPath->text().size());
-
-    // 启用右侧清除按钮
-    ui->lineEditPath->setClearButtonEnabled(true);
-    ui->lineEditName->setClearButtonEnabled(true);
-
-    // 文本变更时触发校验
-    connect(ui->lineEditName, &QLineEdit::textEdited, this,
-            &ProSetPage::onCheckInput);
-    connect(ui->lineEditPath, &QLineEdit::textEdited, this,
-            &ProSetPage::onCheckInput);
+    initUI();
+    initSignals();
 }
 
 ProSetPage::~ProSetPage() { delete ui; }
@@ -56,6 +40,26 @@ AppConsts::InputStatus ProSetPage::validateInput() const {
         return AppConsts::InputStatus::ProjectExists;
 
     return AppConsts::InputStatus::Valid;
+}
+
+void ProSetPage::initUI() {
+    setTitle(tr("设置项目配置"));
+    // 设置提示标签字体颜色为红色
+    ui->labelTips->setStyleSheet("color: red;");
+    // 设置默认路径为当前目录
+    ui->lineEditPath->setText(QDir::currentPath());
+    ui->lineEditPath->setCursorPosition(ui->lineEditPath->text().size());
+    // 启用右侧清除按钮
+    ui->lineEditPath->setClearButtonEnabled(true);
+    ui->lineEditName->setClearButtonEnabled(true);
+}
+
+void ProSetPage::initSignals() {
+    // 文本变更时触发校验
+    connect(ui->lineEditName, &QLineEdit::textEdited, this,
+            &ProSetPage::onCheckInput);
+    connect(ui->lineEditPath, &QLineEdit::textEdited, this,
+            &ProSetPage::onCheckInput);
 }
 
 void ProSetPage::onCheckInput() {

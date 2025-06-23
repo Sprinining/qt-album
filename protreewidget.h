@@ -20,9 +20,12 @@ private:
     QAction *act_set_start_;
     QAction *act_close_pro_;
     QAction *act_slide_show_;
-    QTreeWidgetItem *right_btn_item_;
+    ProTreeItem *right_btn_item_;
     QProgressDialog *dialog_progress_;
     std::shared_ptr<ProTreeThread> thread_create_pro_;
+
+    void initActions();
+    void initSignals();
 
 private slots:
     void onItemPressed(QTreeWidgetItem *item, int column);

@@ -9,49 +9,26 @@
 
 // 传给基类构造函数
 ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
-    // 当用户点击任意 item 时，触发 onItemPressed 处理（用于弹出右键菜单等）
-    connect(this, &ProTreeWidget::itemPressed, this,
-            &ProTreeWidget::onItemPressed);
-
     // 只初始化一次，节省资源，可以多次复用
-    // 菜单项：导入文件
-    act_import_ = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
-    connect(act_import_, &QAction::triggered, this, &ProTreeWidget::onImportProject);
-    // 菜单项：设置活动项目
-    act_set_start_ =
-        new QAction(QIcon(":/icons/core.png"), tr("设置活动项目"), this);
-    // connect(act_set_start, &QAction::triggered, this,
-    // &ProTreeWidget::setAsActive);
-    // 菜单项：关闭项目
-    act_close_pro_ =
-        new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
-    // connect(act_close_pro, &QAction::triggered, this,
-    // &ProTreeWidget::closeProject);
-    // 菜单项：幻灯片播放
-    act_slide_show_ =
-        new QAction(QIcon(":/icons/slideshow.png"), tr("幻灯片播放"), this);
-    // connect(act_slide_show, &QAction::triggered, this,
-    // &ProTreeWidget::startSlideshow);
+    initActions();
+    initSignals();
 }
 
 // 添加一个项目节点到树形控件中
 void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     // 拼接绝对路径（完整项目路径 = 路径 + 项目名）
-    QDir dir(path);
-    const QString file_path = dir.absoluteFilePath(name);
+    const QString file_path = QDir(path).absoluteFilePath(name);
 
-    // 如果已经添加过该路径的项目，避免重复添加
+    // 避免重复添加
     if (set_path_.contains(file_path))
         return;
 
     // 如果目录不存在，尝试创建（确保物理路径存在）
     QDir pro_dir(file_path);
-    if (!pro_dir.exists()) {
-        if (!pro_dir.mkpath("."))
-            return; // 创建失败直接返回
-    }
+    if (!pro_dir.exists() && !pro_dir.mkpath("."))
+        return;
 
-    // 记录该项目路径，防止重复
+    // 加到 set 中，防止重复
     set_path_.insert(file_path);
 
     // 创建自定义项目节点并添加到树上（以此树控件为父）
@@ -68,6 +45,34 @@ void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     item->setData(0, Qt::ToolTipRole, file_path);
 }
 
+void ProTreeWidget::initActions() {
+    act_import_ = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
+    act_set_start_ =
+        new QAction(QIcon(":/icons/core.png"), tr("设置活动项目"), this);
+    act_close_pro_ =
+        new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
+    act_slide_show_ =
+        new QAction(QIcon(":/icons/slideshow.png"), tr("幻灯片播放"), this);
+}
+
+void ProTreeWidget::initSignals() {
+    // 当用户点击任意 item 时，触发 onItemPressed 处理（用于弹出右键菜单等）
+    connect(this, &ProTreeWidget::itemPressed, this,
+            &ProTreeWidget::onItemPressed);
+
+    connect(act_import_, &QAction::triggered, this,
+            &ProTreeWidget::onImportProject);
+
+    // connect(act_set_start, &QAction::triggered, this,
+    // &ProTreeWidget::setAsActive);
+
+    // connect(act_close_pro, &QAction::triggered, this,
+    // &ProTreeWidget::closeProject);
+
+    // connect(act_slide_show, &QAction::triggered, this,
+    // &ProTreeWidget::startSlideshow);
+}
+
 void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
     // 检查是否为右键点击（仅处理右键）
     if (QGuiApplication::mouseButtons() != Qt::RightButton)
@@ -82,7 +87,7 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
         return;
 
     // 记录当前右键点击的项（用于后续槽函数中定位上下文）
-    right_btn_item_ = item;
+    right_btn_item_ = dynamic_cast<ProTreeItem *>(item);
 
     // 创建右键菜单，并添加对应的操作项
     QMenu contextMenu(this);

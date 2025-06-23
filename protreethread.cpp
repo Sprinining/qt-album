@@ -6,8 +6,8 @@
 #include <QFile>
 
 ProTreeThread::ProTreeThread(const QString &src_path, const QString &dist_path,
-                             QTreeWidgetItem *parent_item, int file_count,
-                             QTreeWidget *self, QTreeWidgetItem *root,
+                             ProTreeItem *parent_item, int file_count,
+                             QTreeWidget *self, ProTreeItem *root,
                              QObject *parent)
     : QThread(parent), src_path_(src_path), dist_path_(dist_path),
       parent_item_(parent_item), file_count_(file_count), self_(self),
@@ -35,9 +35,9 @@ void ProTreeThread::run() {
 
 void ProTreeThread::createProTree(const QString &src_path,
                                   const QString &dist_path,
-                                  QTreeWidgetItem *parent_item, int &file_count,
-                                  QTreeWidget *self, QTreeWidgetItem *root,
-                                  QTreeWidgetItem *prev) {
+                                  ProTreeItem *parent_item, int &file_count,
+                                  QTreeWidget *self, ProTreeItem *root,
+                                  ProTreeItem *prev) {
     if (stop_)
         return;
 
