@@ -26,6 +26,7 @@ namespace AppConsts {
 
     namespace UIConfig {
         constexpr int ProgressWidth = 300;
+        constexpr int ProgressMax = 300;
     }
 
 } // namespace AppConsts
