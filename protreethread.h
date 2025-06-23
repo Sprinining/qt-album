@@ -8,7 +8,7 @@
 class ProTreeThread : public QThread {
     Q_OBJECT
 
-  public:
+public:
     // 构造函数：初始化路径、树结构信息、计数器等
     ProTreeThread(const QString &src_path,      // 源路径
                   const QString &dist_path,     // 目标路径
@@ -20,18 +20,18 @@ class ProTreeThread : public QThread {
 
     ~ProTreeThread();
 
-  protected:
+protected:
     // 重写 run()：线程入口函数
     void run() override;
 
-  private:
+private:
     // 递归创建项目树
     void createProTree(const QString &src_path, const QString &dist_path,
                        QTreeWidgetItem *parent_item, int &file_count,
                        QTreeWidget *self, QTreeWidgetItem *root,
                        QTreeWidgetItem *prev = nullptr);
 
-           // 成员变量（缓存参数）
+    // 成员变量（缓存参数）
     QString src_path_;
     QString dist_path_;
     int file_count_;
@@ -40,10 +40,10 @@ class ProTreeThread : public QThread {
     QTreeWidget *self_;
     bool stop_ = false;
 
-  public slots:
+public slots:
     void cancelProgress();
 
-  signals:
+signals:
     void updateProgress(int); // 发送进度更新信号
     void finishProgress(int); // 发送完成信号
 };

@@ -29,7 +29,7 @@ void ProTreeThread::run() {
         return;
     }
 
-           // 线程结束后发送完成信号
+    // 线程结束后发送完成信号
     emit finishProgress(file_count_);
 }
 
@@ -69,7 +69,7 @@ void ProTreeThread::createProTree(const QString &src_path,
             }
             auto *item =
                 new ProTreeItem(parent_item, file_info.fileName(), sub_dist_path,
-                                root, AppConsts::TreeItemType::Directory);
+                                         root, AppConsts::TreeItemType::Directory);
             item->setData(0, Qt::DisplayRole, file_info.fileName());
             item->setData(0, Qt::DecorationRole, QIcon(":/icons/dir.png"));
             item->setData(0, Qt::ToolTipRole, sub_dist_path);
@@ -80,7 +80,7 @@ void ProTreeThread::createProTree(const QString &src_path,
             continue;
         }
 
-               // 判断文件后缀是否合法（只接受图片）
+        // 判断文件后缀是否合法（只接受图片）
         const QString suffix = file_info.completeSuffix().toLower();
         if (suffix != "png" && suffix != "jpg" && suffix != "jpeg")
             continue;
@@ -90,7 +90,7 @@ void ProTreeThread::createProTree(const QString &src_path,
 
         QString dist_file_path = file_info.absoluteFilePath();
 
-               // 如果需要拷贝，则执行拷贝到 dist_path 下
+        // 如果需要拷贝，则执行拷贝到 dist_path 下
         if (need_copy) {
             QDir dist_dir(dist_path);
             dist_file_path = dist_dir.absoluteFilePath(file_info.fileName());
@@ -101,16 +101,16 @@ void ProTreeThread::createProTree(const QString &src_path,
             }
         }
 
-               // 创建图片项并挂到树中
+        // 创建图片项并挂到树中
         auto *item =
             new ProTreeItem(parent_item, file_info.fileName(), dist_file_path, root,
-                            AppConsts::TreeItemType::Picture);
+                                     AppConsts::TreeItemType::Picture);
 
         item->setData(0, Qt::DisplayRole, file_info.fileName());
         item->setData(0, Qt::DecorationRole, QIcon(":/icons/pic.png"));
         item->setData(0, Qt::ToolTipRole, dist_file_path);
 
-               // 设置链表前后关系（可用于双向遍历）
+        // 设置链表前后关系（可用于双向遍历）
         if (prev) {
             auto *prev_pro_item = dynamic_cast<ProTreeItem *>(prev);
             if (prev_pro_item) {
@@ -122,7 +122,7 @@ void ProTreeThread::createProTree(const QString &src_path,
         prev = item;
     }
 
-           // 保留：后续可添加 name_filters 判断或递归目录构建
+    // 保留：后续可添加 name_filters 判断或递归目录构建
 }
 
 void ProTreeThread::cancelProgress() { this->stop_ = true; }

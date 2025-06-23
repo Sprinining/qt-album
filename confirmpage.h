@@ -10,12 +10,12 @@ class ConfirmPage;
 class ConfirmPage : public QWizardPage {
     Q_OBJECT
 
-  public:
-    explicit ConfirmPage(QWidget* parent = nullptr);
+public:
+    explicit ConfirmPage(QWidget *parent = nullptr);
     ~ConfirmPage();
 
-  private:
-    Ui::ConfirmPage* ui;
+private:
+    Ui::ConfirmPage *ui;
 };
 
 #endif // CONFIRMPAGE_H

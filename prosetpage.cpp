@@ -4,7 +4,8 @@
 #include <QFileDialog>
 #include <QLineEdit>
 
-ProSetPage::ProSetPage(QWidget* parent) : QWizardPage(parent), ui(new Ui::ProSetPage) {
+ProSetPage::ProSetPage(QWidget *parent)
+    : QWizardPage(parent), ui(new Ui::ProSetPage) {
     ui->setupUi(this);
     setTitle(tr("设置项目配置"));
 
@@ -16,8 +17,10 @@ ProSetPage::ProSetPage(QWidget* parent) : QWizardPage(parent), ui(new Ui::ProSet
     registerField("proPath*", ui->lineEditPath);
 
     // 文本变更时触发校验
-    connect(ui->lineEditName, &QLineEdit::textEdited, this, &ProSetPage::checkInput);
-    connect(ui->lineEditPath, &QLineEdit::textEdited, this, &ProSetPage::checkInput);
+    connect(ui->lineEditName, &QLineEdit::textEdited, this,
+            &ProSetPage::checkInput);
+    connect(ui->lineEditPath, &QLineEdit::textEdited, this,
+            &ProSetPage::checkInput);
 
     // 设置默认路径为当前目录
     QString curPath = QDir::currentPath();
@@ -29,11 +32,9 @@ ProSetPage::ProSetPage(QWidget* parent) : QWizardPage(parent), ui(new Ui::ProSet
     ui->lineEditName->setClearButtonEnabled(true);
 }
 
-ProSetPage::~ProSetPage() {
-    delete ui;
-}
+ProSetPage::~ProSetPage() { delete ui; }
 
-void ProSetPage::getProSetting(QString& name, QString& path) {
+void ProSetPage::getProSetting(QString &name, QString &path) {
     name = ui->lineEditName->text().trimmed();
     path = ui->lineEditPath->text().trimmed();
 }
@@ -43,13 +44,16 @@ AppConsts::InputStatus ProSetPage::validateInput() const {
     const QString name = ui->lineEditName->text().trimmed();
     const QString path = ui->lineEditPath->text().trimmed();
 
-    if (name.isEmpty() || path.isEmpty()) return AppConsts::InputStatus::EmptyField;
+    if (name.isEmpty() || path.isEmpty())
+        return AppConsts::InputStatus::EmptyField;
 
     QDir dir(path);
-    if (!dir.exists()) return AppConsts::InputStatus::PathNotExist;
+    if (!dir.exists())
+        return AppConsts::InputStatus::PathNotExist;
 
     QString projectPath = dir.absoluteFilePath(name);
-    if (QDir(projectPath).exists()) return AppConsts::InputStatus::ProjectExists;
+    if (QDir(projectPath).exists())
+        return AppConsts::InputStatus::ProjectExists;
 
     return AppConsts::InputStatus::Valid;
 }
@@ -81,8 +85,9 @@ bool ProSetPage::isComplete() const {
     // 因此不应该在这里修改 UI 元素（如调用 label->setText()），
     // 这可能导致界面无法及时刷新，甚至引发未定义行为。
     //
-    // 正确的做法是将 UI 提示的更新放到槽函数中（例如 textEdited 触发的 checkInput()），
-    // 在那里修改 UI 并发出 completeChanged() 信号通知向导状态变化。
+    // 正确的做法是将 UI 提示的更新放到槽函数中（例如 textEdited 触发的
+    // checkInput()）， 在那里修改 UI 并发出 completeChanged()
+    // 信号通知向导状态变化。
     return validateInput() == AppConsts::InputStatus::Valid;
 }
 
@@ -96,15 +101,17 @@ void ProSetPage::on_pushButtonBrowse_clicked() {
     }
 
     // 打开系统文件夹选择对话框，让用户选择一个文件夹路径
-    QString selectedDir = QFileDialog::getExistingDirectory(this,                                // 父窗口
-                                                            tr("选择导入的文件夹"),              // 对话框标题
-                                                            currentPath,                         // 默认打开的路径
-                                                            QFileDialog::ShowDirsOnly |          // 只显示目录（不显示文件）
-                                                                QFileDialog::DontResolveSymlinks // 保留符号链接原样
-    );
+    QString selectedDir = QFileDialog::getExistingDirectory(
+        this,                                // 父窗口
+        tr("选择导入的文件夹"),              // 对话框标题
+        currentPath,                         // 默认打开的路径
+        QFileDialog::ShowDirsOnly |          // 只显示目录（不显示文件）
+            QFileDialog::DontResolveSymlinks // 保留符号链接原样
+        );
 
     // 如果用户取消选择，selectedDir 会是空字符串，此时无需处理
-    if (selectedDir.isEmpty()) return;
+    if (selectedDir.isEmpty())
+        return;
 
     // 打印用户选择的目录路径，便于调试
     qDebug() << "Selected directory:" << selectedDir;

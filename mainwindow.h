@@ -15,15 +15,15 @@ class ProTreeDialog;
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-  public:
-    MainWindow(QWidget* parent = nullptr);
+public:
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-  private slots:
+private slots:
     void createPro(bool);
     void openPro(bool);
 
-  private:
-    Ui::MainWindow* ui;
-    ProTreeDialog* protree_dialog;
+private:
+    Ui::MainWindow *ui;
+    ProTreeDialog *protree_dialog;
 };
 #endif // MAINWINDOW_H

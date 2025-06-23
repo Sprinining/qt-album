@@ -12,21 +12,20 @@ class ProTreeDialog;
 class ProTreeDialog : public QDialog {
     Q_OBJECT // 启用 Qt 的元对象系统，支持信号与槽机制
 
-  public :
-    explicit ProTreeDialog(QWidget* parent = nullptr);
+public : explicit ProTreeDialog(QWidget *parent = nullptr);
     ~ProTreeDialog();
 
-  public slots:
+public slots:
     /**
-     * @brief recvProSetting 接收项目设置信息的槽函数
-     *        通常由创建向导窗口（如 Wizard）发送信号触发，用于初始化项目树显示
-     * @param name 项目名称
-     * @param path 项目路径
-     */
-    void recvProSetting(const QString& name, const QString& path);
+   * @brief recvProSetting 接收项目设置信息的槽函数
+   *        通常由创建向导窗口（如 Wizard）发送信号触发，用于初始化项目树显示
+   * @param name 项目名称
+   * @param path 项目路径
+   */
+    void recvProSetting(const QString &name, const QString &path);
 
-  private:
-    Ui::ProTreeDialog* ui;
+private:
+    Ui::ProTreeDialog *ui;
 };
 
 #endif // PROTREEDIALOG_H

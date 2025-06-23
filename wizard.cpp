@@ -2,14 +2,12 @@
 #include "ui_wizard.h"
 #include <QDialog>
 
-Wizard::Wizard(QWidget* parent) : QWizard(parent), ui(new Ui::Wizard) {
+Wizard::Wizard(QWidget *parent) : QWizard(parent), ui(new Ui::Wizard) {
     ui->setupUi(this);
     setWindowTitle(tr("创建项目"));
 }
 
-Wizard::~Wizard() {
-    delete ui;
-}
+Wizard::~Wizard() { delete ui; }
 
 // 重写 QWizard 的 done() 方法，处理向导完成时的逻辑
 void Wizard::done(int result) {

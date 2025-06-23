@@ -11,24 +11,24 @@ class ProSetPage;
 class ProSetPage : public QWizardPage {
     Q_OBJECT
 
-  public:
-    explicit ProSetPage(QWidget* parent = nullptr);
+public:
+    explicit ProSetPage(QWidget *parent = nullptr);
     ~ProSetPage();
-    void getProSetting(QString& name, QString& path);
+    void getProSetting(QString &name, QString &path);
 
-  protected:
+protected:
     bool isComplete() const override;
 
-  private slots:
+private slots:
     void checkInput(); // 实时检查输入，更新提示
 
     void on_pushButtonBrowse_clicked();
 
-  private:
+private:
     AppConsts::InputStatus validateInput() const; // 共用输入校验逻辑
 
-  private:
-    Ui::ProSetPage* ui;
+private:
+    Ui::ProSetPage *ui;
 };
 
 #endif // PROSETPAGE_H
