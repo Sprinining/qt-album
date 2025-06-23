@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
             &MainWindow::openPro); // 打开项目
 
     // --------------------- 初始化项目树对话框 ---------------------
-    protree_dialog = new ProTreeDialog(this);         // 创建项目树对话框实例
-    ui->verticalLayoutPro->addWidget(protree_dialog); // 将其添加到主窗口布局中
+    protree_dialog_ = new ProTreeDialog(this);         // 创建项目树对话框实例
+    ui->verticalLayoutPro->addWidget(protree_dialog_); // 将其添加到主窗口布局中
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -54,14 +54,14 @@ void MainWindow::createPro(bool) {
     Wizard *wizard = new Wizard(this);
 
     // 连接 Wizard 的信号 sendProSetting 到项目树接收槽函数
-    connect(wizard, &Wizard::sendProSetting, protree_dialog,
+    connect(wizard, &Wizard::sendProSetting, protree_dialog_,
             &ProTreeDialog::recvProSetting);
 
     // 弹出模态对话框（阻塞式）
     wizard->exec();
 
     // 断开连接
-    disconnect(wizard, &Wizard::sendProSetting, protree_dialog,
+    disconnect(wizard, &Wizard::sendProSetting, protree_dialog_,
                &ProTreeDialog::recvProSetting);
 }
 void MainWindow::openPro(bool) { qDebug() << "openPro"; }

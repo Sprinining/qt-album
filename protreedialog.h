@@ -15,6 +15,9 @@ class ProTreeDialog : public QDialog {
 public : explicit ProTreeDialog(QWidget *parent = nullptr);
     ~ProTreeDialog();
 
+private:
+    Ui::ProTreeDialog *ui;
+
 public slots:
     /**
    * @brief recvProSetting 接收项目设置信息的槽函数
@@ -23,9 +26,6 @@ public slots:
    * @param path 项目路径
    */
     void recvProSetting(const QString &name, const QString &path);
-
-private:
-    Ui::ProTreeDialog *ui;
 };
 
 #endif // PROTREEDIALOG_H

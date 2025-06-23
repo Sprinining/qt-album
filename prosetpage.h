@@ -19,16 +19,14 @@ public:
 protected:
     bool isComplete() const override;
 
-private slots:
-    void checkInput(); // 实时检查输入，更新提示
-
-    void on_pushButtonBrowse_clicked();
-
-private:
-    AppConsts::InputStatus validateInput() const; // 共用输入校验逻辑
-
 private:
     Ui::ProSetPage *ui;
+
+    AppConsts::InputStatus validateInput() const; // 共用输入校验逻辑
+
+private slots:
+    void checkInput(); // 实时检查输入，更新提示
+    void on_pushButtonBrowse_clicked();
 };
 
 #endif // PROSETPAGE_H

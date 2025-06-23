@@ -18,12 +18,13 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-private slots:
-    void createPro(bool);
-    void openPro(bool);
 
 private:
     Ui::MainWindow *ui;
-    ProTreeDialog *protree_dialog;
+    ProTreeDialog *protree_dialog_;
+
+private slots:
+    void createPro(bool);
+    void openPro(bool);
 };
 #endif // MAINWINDOW_H

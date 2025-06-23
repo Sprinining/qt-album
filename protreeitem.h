@@ -29,9 +29,9 @@ public:
     void setItemNext(QTreeWidgetItem *next); // 设置下一个兄弟节点
 
 private:
-    QString path;               // 节点对应的路径（通常用于表示文件/目录路径）
-    QString name;               // 节点名称（可用于显示或标识，当前未使用）
-    QTreeWidgetItem *item_root; // 根节点指针（记录整棵树的顶层节点）
-    QTreeWidgetItem *item_prev; // 前一个兄弟节点（用于链表式遍历或自定义导航）
-    QTreeWidgetItem *item_next; // 下一个兄弟节点（同上）
+    QString path_;               // 节点对应的路径（通常用于表示文件/目录路径）
+    QString name_;               // 节点名称（可用于显示或标识，当前未使用）
+    QTreeWidgetItem *item_root_; // 根节点指针（记录整棵树的顶层节点）
+    QTreeWidgetItem *item_prev_; // 前一个兄弟节点（用于链表式遍历或自定义导航）
+    QTreeWidgetItem *item_next_; // 下一个兄弟节点（同上）
 };

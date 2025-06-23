@@ -14,22 +14,22 @@ ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
             &ProTreeWidget::onItemPressed);
 
     // 导入文件动作
-    act_import = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
-    connect(act_import, &QAction::triggered, this, &ProTreeWidget::import);
+    act_import_ = new QAction(QIcon(":/icons/import.png"), tr("导入文件"), this);
+    connect(act_import_, &QAction::triggered, this, &ProTreeWidget::import);
 
     // 设置活动项目
-    act_set_start =
+    act_set_start_ =
         new QAction(QIcon(":/icons/core.png"), tr("设置活动项目"), this);
     // connect(act_set_start, &QAction::triggered, this,
     // &ProTreeWidget::setAsActive);
 
     // 关闭项目
-    act_close_pro = new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
+    act_close_pro_ = new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
     // connect(act_close_pro, &QAction::triggered, this,
     // &ProTreeWidget::closeProject);
 
     // 幻灯片播放
-    act_slide_show =
+    act_slide_show_ =
         new QAction(QIcon(":/icons/slideshow.png"), tr("轮播图播放"), this);
     // connect(act_slide_show, &QAction::triggered, this,
     // &ProTreeWidget::startSlideshow);
@@ -42,7 +42,7 @@ void ProTreeWidget::addProToTree(const QString &name, const QString &path) {
     const QString file_path = dir.absoluteFilePath(name);
 
     // 如果已经添加过该路径的项目，避免重复添加
-    if (set_path.contains(file_path))
+    if (set_path_.contains(file_path))
         return;
 
     // 如果目录不存在，尝试创建（确保物理路径存在）
@@ -53,7 +53,7 @@ void ProTreeWidget::addProToTree(const QString &name, const QString &path) {
     }
 
     // 记录该项目路径，防止重复
-    set_path.insert(file_path);
+    set_path_.insert(file_path);
 
     // 创建自定义项目节点并添加到树上（以此树控件为父）
     auto *item =
@@ -83,14 +83,14 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
         return;
 
     // 记录当前右键点击的项（用于后续槽函数中定位上下文）
-    right_btn_item = item;
+    right_btn_item_ = item;
 
     // 创建右键菜单，并添加对应的操作项
     QMenu contextMenu(this);
-    contextMenu.addAction(act_import);     // 导入文件
-    contextMenu.addAction(act_set_start);  // 设置为起始项目
-    contextMenu.addAction(act_close_pro);  // 关闭项目
-    contextMenu.addAction(act_slide_show); // 幻灯片浏览
+    contextMenu.addAction(act_import_);     // 导入文件
+    contextMenu.addAction(act_set_start_);  // 设置为起始项目
+    contextMenu.addAction(act_close_pro_);  // 关闭项目
+    contextMenu.addAction(act_slide_show_); // 幻灯片浏览
 
     // 在鼠标位置弹出菜单（阻塞直到用户操作）
     contextMenu.exec(QCursor::pos());
@@ -98,11 +98,11 @@ void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
 
 void ProTreeWidget::import() {
     // 安全检查：未选中任何节点时直接返回，并使用默认路径
-    if (!right_btn_item)
+    if (!right_btn_item_)
         return;
 
     // 获取当前项目节点路径
-    ProTreeItem *proItem = dynamic_cast<ProTreeItem *>(right_btn_item);
+    ProTreeItem *proItem = dynamic_cast<ProTreeItem *>(right_btn_item_);
     if (!proItem)
         return;
 
@@ -129,41 +129,41 @@ void ProTreeWidget::import() {
     int file_count = 0;
 
     thread_create_pro_ = std::make_shared<ProTreeThread>(
-        std::ref(importPath), std::ref(basePath), right_btn_item, file_count,
-        this, right_btn_item, nullptr);
+        std::ref(importPath), std::ref(basePath), right_btn_item_, file_count,
+        this, right_btn_item_, nullptr);
     connect(thread_create_pro_.get(), &ProTreeThread::updateProgress, this,
             &ProTreeWidget::updateProgress);
     connect(thread_create_pro_.get(), &ProTreeThread::finishProgress, this,
             &ProTreeWidget::finishProgress);
-    connect(dialog_progress, &QProgressDialog::canceled, this,
+    connect(dialog_progress_, &QProgressDialog::canceled, this,
             &ProTreeWidget::canceled);
     connect(this, &ProTreeWidget::cancelProgress, thread_create_pro_.get(),
             &ProTreeThread::cancelProgress);
     thread_create_pro_->start();
 
-    dialog_progress = new QProgressDialog(this);
-    dialog_progress->setWindowTitle(tr("请等待..."));
-    dialog_progress->setFixedWidth(AppConsts::UIConfig::ProgressWidth);
-    dialog_progress->setRange(0, AppConsts::UIConfig::ProgressWidth);
-    dialog_progress->exec();
+    dialog_progress_ = new QProgressDialog(this);
+    dialog_progress_->setWindowTitle(tr("请等待..."));
+    dialog_progress_->setFixedWidth(AppConsts::UIConfig::ProgressWidth);
+    dialog_progress_->setRange(0, AppConsts::UIConfig::ProgressWidth);
+    dialog_progress_->exec();
 }
 
 void ProTreeWidget::updateProgress(int count) {
-    if (!dialog_progress)
+    if (!dialog_progress_)
         return;
     if (count >= AppConsts::UIConfig::ProgressMax) {
-        dialog_progress->setValue(count % AppConsts::UIConfig::ProgressMax);
+        dialog_progress_->setValue(count % AppConsts::UIConfig::ProgressMax);
     } else {
     }
 }
 
 void ProTreeWidget::finishProgress() {
-    dialog_progress->setValue(AppConsts::UIConfig::ProgressMax);
-    dialog_progress->deleteLater();
+    dialog_progress_->setValue(AppConsts::UIConfig::ProgressMax);
+    dialog_progress_->deleteLater();
 }
 
 void ProTreeWidget::canceled() {
     emit cancelProgress();
-    delete dialog_progress;
-    dialog_progress = nullptr;
+    delete dialog_progress_;
+    dialog_progress_ = nullptr;
 }
