@@ -34,7 +34,7 @@ ProSetPage::ProSetPage(QWidget *parent)
 
 ProSetPage::~ProSetPage() { delete ui; }
 
-void ProSetPage::getProSetting(QString &name, QString &path) {
+void ProSetPage::getProjectSetting(QString &name, QString &path) const {
     name = ui->lineEditName->text().trimmed();
     path = ui->lineEditPath->text().trimmed();
 }

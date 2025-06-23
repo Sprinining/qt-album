@@ -14,7 +14,8 @@ class ProSetPage : public QWizardPage {
 public:
     explicit ProSetPage(QWidget *parent = nullptr);
     ~ProSetPage();
-    void getProSetting(QString &name, QString &path);
+    // 返回从向导页获得的信息
+    void getProjectSetting(QString &name, QString &path) const;
 
 protected:
     bool isComplete() const override;
