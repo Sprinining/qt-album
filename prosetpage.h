@@ -18,15 +18,18 @@ public:
     void getProjectSetting(QString &name, QString &path) const;
 
 protected:
+    // 用于确定“下一步”或“完成”按钮是否应该被启用或禁用
     bool isComplete() const override;
 
 private:
     Ui::ProSetPage *ui;
 
-    AppConsts::InputStatus validateInput() const; // 共用输入校验逻辑
+    // 共用输入校验逻辑
+    AppConsts::InputStatus validateInput() const;
 
 private slots:
-    void checkInput(); // 实时检查输入，更新提示
+    // 实时检查输入，更新提示
+    void checkInput();
     void on_pushButtonBrowse_clicked();
 };
 

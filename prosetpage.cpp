@@ -13,23 +13,23 @@ ProSetPage::ProSetPage(QWidget *parent)
     ui->labelTips->setStyleSheet("color: red;");
 
     // 注册字段，带 * 表示必须填写
-    registerField("proName*", ui->lineEditName);
-    registerField("proPath*", ui->lineEditPath);
+    registerField("projectName*", ui->lineEditName);
+    registerField("projectPath*", ui->lineEditPath);
+
+    // 设置默认路径为当前目录
+    QString cur_path = QDir::currentPath();
+    ui->lineEditPath->setText(cur_path);
+    ui->lineEditPath->setCursorPosition(ui->lineEditPath->text().size());
+
+    // 启用右侧清除按钮
+    ui->lineEditPath->setClearButtonEnabled(true);
+    ui->lineEditName->setClearButtonEnabled(true);
 
     // 文本变更时触发校验
     connect(ui->lineEditName, &QLineEdit::textEdited, this,
             &ProSetPage::checkInput);
     connect(ui->lineEditPath, &QLineEdit::textEdited, this,
             &ProSetPage::checkInput);
-
-    // 设置默认路径为当前目录
-    QString curPath = QDir::currentPath();
-    ui->lineEditPath->setText(curPath);
-    ui->lineEditPath->setCursorPosition(ui->lineEditPath->text().size());
-
-    // 启用右侧清除按钮
-    ui->lineEditPath->setClearButtonEnabled(true);
-    ui->lineEditName->setClearButtonEnabled(true);
 }
 
 ProSetPage::~ProSetPage() { delete ui; }
@@ -58,7 +58,6 @@ AppConsts::InputStatus ProSetPage::validateInput() const {
     return AppConsts::InputStatus::Valid;
 }
 
-// 根据输入状态实时更新提示
 void ProSetPage::checkInput() {
     switch (validateInput()) {
     case AppConsts::InputStatus::EmptyField:
@@ -75,10 +74,10 @@ void ProSetPage::checkInput() {
         break;
     }
 
+    // 发送信号通知 isComplete()
     emit completeChanged();
 }
 
-// QWizard 使用的有效性判断
 bool ProSetPage::isComplete() const {
     // 注意：isComplete() 是一个 const 函数，设计上用于纯粹判断页面是否完整。
     // Qt 框架可能会频繁且不定时调用此函数（甚至在事件循环之外），
@@ -92,32 +91,29 @@ bool ProSetPage::isComplete() const {
 }
 
 void ProSetPage::on_pushButtonBrowse_clicked() {
-    // 获取当前 lineEdit 中的路径作为初始目录（用户可能已经手动输入了）
-    QString currentPath = ui->lineEditPath->text().trimmed();
+    // 获取当前 lineEdit 中的路径作为初始目录
+    QString cur_path = ui->lineEditPath->text().trimmed();
 
     // 如果输入为空或目录不存在，则使用当前工作目录作为备选默认路径
-    if (currentPath.isEmpty() || !QDir(currentPath).exists()) {
-        currentPath = QDir::currentPath(); // fallback 默认当前工作目录
+    if (cur_path.isEmpty() || !QDir(cur_path).exists()) {
+        cur_path = QDir::currentPath();
     }
 
     // 打开系统文件夹选择对话框，让用户选择一个文件夹路径
-    QString selectedDir = QFileDialog::getExistingDirectory(
+    QString selected_dir = QFileDialog::getExistingDirectory(
         this,                                // 父窗口
         tr("选择导入的文件夹"),              // 对话框标题
-        currentPath,                         // 默认打开的路径
+        cur_path,                            // 默认打开的路径
         QFileDialog::ShowDirsOnly |          // 只显示目录（不显示文件）
             QFileDialog::DontResolveSymlinks // 保留符号链接原样
         );
 
     // 如果用户取消选择，selectedDir 会是空字符串，此时无需处理
-    if (selectedDir.isEmpty())
+    if (selected_dir.isEmpty())
         return;
 
-    // 打印用户选择的目录路径，便于调试
-    qDebug() << "Selected directory:" << selectedDir;
-
     // 将选择的路径填充到 UI 的 lineEditPath 中
-    ui->lineEditPath->setText(selectedDir);
+    ui->lineEditPath->setText(selected_dir);
 
     // 立即校验输入，刷新提示和向导按钮状态
     checkInput();
