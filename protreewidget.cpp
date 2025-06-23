@@ -24,7 +24,8 @@ ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
     // &ProTreeWidget::setAsActive);
 
     // 关闭项目
-    act_close_pro_ = new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
+    act_close_pro_ =
+        new QAction(QIcon(":/icons/close.png"), tr("关闭项目"), this);
     // connect(act_close_pro, &QAction::triggered, this,
     // &ProTreeWidget::closeProject);
 
@@ -135,13 +136,14 @@ void ProTreeWidget::import() {
             &ProTreeWidget::updateProgress);
     connect(thread_create_pro_.get(), &ProTreeThread::finishProgress, this,
             &ProTreeWidget::finishProgress);
-    connect(dialog_progress_, &QProgressDialog::canceled, this,
-            &ProTreeWidget::canceled);
+
     connect(this, &ProTreeWidget::cancelProgress, thread_create_pro_.get(),
             &ProTreeThread::cancelProgress);
     thread_create_pro_->start();
 
     dialog_progress_ = new QProgressDialog(this);
+    connect(dialog_progress_, &QProgressDialog::canceled, this,
+            &ProTreeWidget::canceled);
     dialog_progress_->setWindowTitle(tr("请等待..."));
     dialog_progress_->setFixedWidth(AppConsts::UIConfig::ProgressWidth);
     dialog_progress_->setRange(0, AppConsts::UIConfig::ProgressWidth);
