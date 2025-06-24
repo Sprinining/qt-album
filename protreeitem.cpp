@@ -21,9 +21,9 @@ const ProTreeItem *ProTreeItem::getItemPrev() const { return item_prev_; }
 const ProTreeItem *ProTreeItem::getItemNext() const { return item_next_; }
 
 // todo: 函数定义待完善
-const ProTreeItem *ProTreeItem::getFirstItemChild() const {}
+const ProTreeItem *ProTreeItem::getFirstItemChild() const { return nullptr; }
 
-const ProTreeItem *ProTreeItem::getLastItemChild() const {}
+const ProTreeItem *ProTreeItem::getLastItemChild() const { return nullptr; }
 
 void ProTreeItem::setItemPrev(ProTreeItem *prev) { item_prev_ = prev; }
 
