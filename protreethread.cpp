@@ -10,6 +10,10 @@ ProTreeThread::ProTreeThread(const ProTreeThreadParams &params, QObject *parent)
 ProTreeThread::~ProTreeThread() {}
 
 void ProTreeThread::run() {
+    int total_count = countImages(params_.src_path);
+    emit progressUpdated(0);
+    emit totalFileCountCalculated(total_count);
+
     int file_count = 0;
     // 用于链表式连接同一层的兄弟节点，初始为空，递归过程中更新
     ProTreeItem *prev = nullptr;
@@ -140,6 +144,29 @@ bool ProTreeThread::copyIfNeeded(const QString &src, QString &dest) {
 bool ProTreeThread::isValidImage(const QString &suffix) const {
     static const QSet<QString> image_types = {"png", "jpg", "jpeg"};
     return image_types.contains(suffix);
+}
+
+// 递归统计目录下所有图片文件数量（包括子目录）
+int ProTreeThread::countImages(const QString &path) const {
+    int count = 0;
+
+    QDir dir(path);
+    dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+    QFileInfoList list = dir.entryInfoList();
+
+    for (const QFileInfo &info : list) {
+        if (info.isDir()) {
+            // 递归处理子目录
+            count += countImages(info.absoluteFilePath());
+        } else {
+            // 判断是否为合法图片后缀
+            const QString suffix = info.completeSuffix().toLower();
+            if (isValidImage(suffix))
+                ++count;
+        }
+    }
+
+    return count;
 }
 
 // 设置线程终止标志

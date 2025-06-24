@@ -34,11 +34,18 @@ private:
     void connectThreadSignals();
 
 private slots:
+    // 用户点击树控件中的某一项时触发（用于处理右键菜单等）
     void onItemPressed(QTreeWidgetItem *item, int column);
+    // 用户右键选择“导入文件”动作时触发，启动导入目录线程
     void onImportProject();
+    // 导入线程发出进度更新信号时调用，更新进度条显示（当前导入的文件数）
     void onProgressUpdated(int count);
+    // 导入线程完成时触发，关闭并销毁进度条对话框
     void onProgressFinished();
+    // 用户取消导入操作时触发，发出取消信号通知导入线程终止
     void onProgressCanceled();
+    // 接收统计的文件总数
+    void onTotalFileCountCalculated(int total);
 
 signals:
     void progressCanceled();

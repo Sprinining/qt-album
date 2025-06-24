@@ -167,6 +167,9 @@ void ProTreeWidget::connectThreadSignals() {
     // 用户点击取消时，触发此信号通知线程停止操作，实现线程安全取消
     connect(this, &ProTreeWidget::progressCanceled, thread,
             &ProTreeThread::onProgressCanceled);
+
+    connect(thread, &ProTreeThread::totalFileCountCalculated, this,
+            &ProTreeWidget::onTotalFileCountCalculated);
 }
 
 void ProTreeWidget::showProgressDialog() {
@@ -184,8 +187,6 @@ void ProTreeWidget::showProgressDialog() {
 void ProTreeWidget::onProgressUpdated(int count) {
     if (!dialog_progress_)
         return;
-    dialog_progress_->setMaximum(
-        AppConsts::UIConfig::ProgressMax); // 或任意足够大的数
     dialog_progress_->setValue(count);
 }
 
@@ -202,4 +203,9 @@ void ProTreeWidget::onProgressCanceled() {
     emit progressCanceled();
     delete dialog_progress_;
     dialog_progress_ = nullptr;
+}
+
+void ProTreeWidget::onTotalFileCountCalculated(int total) {
+    if (dialog_progress_)
+        dialog_progress_->setMaximum(total);
 }

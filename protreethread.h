@@ -29,6 +29,9 @@ protected:
     void run() override;
 
 private:
+    ProTreeThreadParams params_;   // 构造参数副本
+    std::atomic_bool stop_{false}; // 停止标志（可由主线程触发取消操作）
+
     // 递归遍历目录并构建项目树
     void traverse(const QString &src_path,  // 当前遍历的源目录
                   const QString &dest_path, // 当前目标目录
@@ -36,15 +39,12 @@ private:
                   int &file_count,          // 导入图片总数（引用统计）
                   ProTreeItem *root,        // 根节点（用于回退删除）
                   ProTreeItem *&prev);      // 前一个兄弟节点（构建链表）
-
     // 判断是否需要拷贝文件，并执行拷贝
     bool copyIfNeeded(const QString &src, QString &dest);
-
     // 判断文件是否为支持的图片格式
     bool isValidImage(const QString &suffix) const;
-
-    ProTreeThreadParams params_;   // 构造参数副本
-    std::atomic_bool stop_{false}; // 停止标志（可由主线程触发取消操作）
+    // 递归统计目录下所有图片数量
+    int countImages(const QString &path) const;
 
 public slots:
     // 外部调用，设置取消标志
@@ -53,13 +53,13 @@ public slots:
 signals:
     // 每导入一个文件触发，用于更新进度
     void progressUpdated(int count);
-
     // 全部导入完成触发（包含总文件数）
     void progressFinished(int total);
-
     // 每创建一个节点触发（主线程应响应此信号添加到 UI）
     // 线程中不操作 UI，UI 全部由主线程响应这个信号 来更新
     void itemCreated(ProTreeItem *parent, ProTreeItem *item);
+    // 告知主线程最大值
+    void totalFileCountCalculated(int);
 };
 
 #endif // PROTREETHREAD_H
