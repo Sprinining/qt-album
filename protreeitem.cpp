@@ -25,6 +25,12 @@ const ProTreeItem *ProTreeItem::getFirstItemChild() const { return nullptr; }
 
 const ProTreeItem *ProTreeItem::getLastItemChild() const { return nullptr; }
 
+AppConsts::ProjectSource ProTreeItem::getSource() const { return source_; }
+
 void ProTreeItem::setItemPrev(ProTreeItem *prev) { item_prev_ = prev; }
 
 void ProTreeItem::setItemNext(ProTreeItem *next) { item_next_ = next; }
+
+void ProTreeItem::setSource(AppConsts::ProjectSource source) {
+    source_ = source;
+}
