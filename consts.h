@@ -24,6 +24,16 @@ enum class InputStatus {
     ProjectExists // 项目路径已存在，冲突
 };
 
+enum class ProjectOperation {
+    Create, // 会复制文件且更新 UI
+    Import  // 仅更新 UI，不复制
+};
+
+enum class ProjectSource {
+    Created, // 是创建的
+    Imported // 是导入的，不可以提供删除本地文件的功能
+};
+
 namespace UIConfig {
 constexpr int ProgressWidth = 300;
 constexpr int ProgressMax = 300;
