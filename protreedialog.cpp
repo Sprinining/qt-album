@@ -14,3 +14,7 @@ void ProTreeDialog::onProjectSettingChanged(const QString &name,
     // 根据路径和问价夹名称，导入项目树
     ui->treeWidget->addProjectToTree(name, dir_path);
 }
+
+void ProTreeDialog::onOpenProject(const QString &dir_path) {
+    ui->treeWidget->openProject(dir_path);
+}

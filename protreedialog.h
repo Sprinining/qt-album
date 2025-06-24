@@ -20,6 +20,7 @@ private:
 public slots:
     // 接收项目设置信息的槽函数
     void onProjectSettingChanged(const QString &name, const QString &dir_path);
+    void onOpenProject(const QString &dir_path);
 };
 
 #endif // PROTREEDIALOG_H

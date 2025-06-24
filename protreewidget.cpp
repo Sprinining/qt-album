@@ -21,7 +21,7 @@ void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     const QString file_path = QDir(path).absoluteFilePath(name);
 
     // 避免重复添加
-    if (set_path_.contains(file_path))
+    if (paths_.contains(file_path))
         return;
 
     // 如果目录不存在，尝试创建（确保物理路径存在）
@@ -30,7 +30,7 @@ void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
         return;
 
     // 加到 set 中，防止重复
-    set_path_.insert(file_path);
+    paths_.insert(file_path);
 
     // 创建根节点（以此树控件为父）
     auto *item =
@@ -157,7 +157,7 @@ void ProTreeWidget::onCloseProject() {
 
     // 获取目标路径并从集合中移除
     const QString delete_path = right_clicked_item_->getFilePath();
-    set_path_.remove(delete_path);
+    paths_.remove(delete_path);
 
     // 删除本地文件（如果勾选）
     if (remove_pro_dialog.shouldDeleteLocalFile())
@@ -216,6 +216,12 @@ void ProTreeWidget::connectThreadSignals() {
 
     connect(thread, &ProTreeThread::totalFileCountCalculated, this,
             &ProTreeWidget::onTotalFileCountCalculated);
+}
+
+void ProTreeWidget::openProject(const QString &dir_path) {
+    qDebug() << dir_path;
+    if (paths_.contains(dir_path))
+        return;
 }
 
 void ProTreeWidget::showProgressDialog() {

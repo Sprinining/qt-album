@@ -4,6 +4,7 @@
 #include "wizard.h"
 #include <QAction>
 #include <QDebug>
+#include <QFileDialog>
 #include <QMenu>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -51,6 +52,8 @@ void MainWindow::initSignals() {
             &MainWindow::onCreateProject);
     connect(action_open_pro_, &QAction::triggered, this,
             &MainWindow::onOpenProject);
+    connect(this, &MainWindow::openProject, protree_dialog_,
+            &ProTreeDialog::onOpenProject);
 }
 
 void MainWindow::onCreateProject(bool) {
@@ -62,4 +65,10 @@ void MainWindow::onCreateProject(bool) {
     wizard->exec();
 }
 
-void MainWindow::onOpenProject(bool) { qDebug() << "openPro"; }
+void MainWindow::onOpenProject(bool) {
+    QString dir_path = QFileDialog::getExistingDirectory(this, tr("选择项目目录"),
+                                                         QDir::currentPath());
+    if (dir_path.isEmpty())
+        return;
+    emit openProject(dir_path);
+}

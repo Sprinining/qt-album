@@ -39,5 +39,8 @@ private slots:
     void onCreateProject(bool);
     // 打开项目按钮的槽函数
     void onOpenProject(bool);
+
+signals:
+    void openProject(QString dir_path);
 };
 #endif // MAINWINDOW_H
