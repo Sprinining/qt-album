@@ -26,13 +26,10 @@ void ProTreeThread::run() {
     if (stop_) {
         // 1. 从树控件中查找这个项目节点的 index
         auto index = params_.tree_widget->indexOfTopLevelItem(params_.root);
-
         // 2. 从树控件中删除该节点（释放 UI 资源）
         delete params_.tree_widget->takeTopLevelItem(index);
-
         // 3. 删除对应的磁盘目录（包含已复制文件）
         QDir(params_.root->getFilePath()).removeRecursively();
-
         return;
     }
 
@@ -124,20 +121,22 @@ void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
     }
 }
 
-// 拷贝文件（如果源路径与目标路径不同）
+// 判读是否需要拷贝文件
 bool ProTreeThread::copyIfNeeded(const QString &src, QString &dest) {
+    // 如果是导入操作，直接跳过复制
+    if (params_.operation == AppConsts::ProjectOperation::Import)
+        return true;
+
+    // 如果源目录和目标目录相同，跳过复制
     if (params_.src_path == params_.dest_path)
-        return true; // 同目录无需拷贝
+        return true;
 
+    // 目标文件已存在，先删除
     if (QFile::exists(dest))
-        QFile::remove(dest); // 移除目标已有文件
+        QFile::remove(dest);
 
-    if (!QFile::copy(src, dest)) {
-        qWarning() << "Copy failed:" << src << "->" << dest;
-        return false;
-    }
-
-    return true;
+    // 复制文件
+    return QFile::copy(src, dest);
 }
 
 // 检查是否是支持的图片格式

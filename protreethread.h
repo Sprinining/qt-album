@@ -14,6 +14,8 @@ struct ProTreeThreadParams {
     ProTreeItem *parent_item = nullptr; // 要插入子节点的父项目节点
     QTreeWidget *tree_widget = nullptr; // 指向当前树控件本体
     ProTreeItem *root = nullptr;        // 根节点（用于顶层构建或清理）
+    AppConsts::ProjectOperation operation =
+        AppConsts::ProjectOperation::Create; // 操作类型
 };
 
 class ProTreeThread : public QThread {
