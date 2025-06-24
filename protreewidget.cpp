@@ -1,6 +1,7 @@
 #include "protreewidget.h"
 #include "consts.h"
 #include "protreeitem.h"
+#include "removeprodialog.h"
 #include <QDebug>
 #include <QDir>
 #include <QFileDialog>
@@ -144,7 +145,32 @@ void ProTreeWidget::onSetActiveProject() {
     active_item_->setFont(0, font);
 }
 
-void ProTreeWidget::onCloseProject() { qDebug() << "onCloseProject"; }
+void ProTreeWidget::onCloseProject() {
+    // 检查 right_clicked_item_ 合法性（避免空指针崩溃）
+    if (!right_clicked_item_)
+        return;
+
+    // 弹出确认对话框（模态）
+    RemoveProDialog remove_pro_dialog(this);
+    if (remove_pro_dialog.exec() != QDialog::Accepted)
+        return;
+
+    // 获取目标路径并从集合中移除
+    const QString delete_path = right_clicked_item_->getFilePath();
+    set_path_.remove(delete_path);
+
+    // 删除本地文件（如果勾选）
+    if (remove_pro_dialog.shouldDeleteLocalFile())
+        QDir(delete_path).removeRecursively();
+
+    // 处理 UI：清除 active 项、删除树节点
+    const int index = this->indexOfTopLevelItem(right_clicked_item_);
+    if (right_clicked_item_ == active_item_)
+        active_item_ = nullptr;
+
+    delete this->takeTopLevelItem(index);
+    right_clicked_item_ = nullptr;
+}
 
 void ProTreeWidget::onStartSlideshow() { qDebug() << "onStartSlideshow"; }
 
