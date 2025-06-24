@@ -1,128 +1,146 @@
 #include "protreethread.h"
 #include "consts.h"
-#include "protreeitem.h"
 #include <QDebug>
 #include <QDir>
 #include <QFile>
 
-ProTreeThread::ProTreeThread(const QString &src_path, const QString &dist_path,
-                             ProTreeItem *parent_item, int file_count,
-                             QTreeWidget *self, ProTreeItem *root,
-                             QObject *parent)
-    : QThread(parent), src_path_(src_path), dist_path_(dist_path),
-      parent_item_(parent_item), file_count_(file_count), self_(self),
-      root_(root), stop_(false) {}
+ProTreeThread::ProTreeThread(const ProTreeThreadParams &params, QObject *parent)
+    : QThread(parent), params_(params) {}
 
 ProTreeThread::~ProTreeThread() {}
 
 void ProTreeThread::run() {
-    qDebug() << "[Thread] ProTreeThread::run 开始构建项目树";
+    int file_count = 0;
+    // 用于链表式连接同一层的兄弟节点，初始为空，递归过程中更新
+    ProTreeItem *prev = nullptr;
 
-    createProTree(src_path_, dist_path_, parent_item_, file_count_, self_, root_);
+    // 启动目录遍历构建逻辑
+    traverse(params_.src_path, params_.dest_path, params_.parent_item, file_count,
+             params_.root, prev);
 
+    // 若线程被取消，回滚删除节点和文件夹
     if (stop_) {
-        auto path = dynamic_cast<ProTreeItem *>(root_)->getFilePath();
-        auto index = self_->indexOfTopLevelItem(root_);
-        delete self_->takeTopLevelItem(index);
-        QDir dir(path);
-        dir.removeRecursively();
+        // 1. 从树控件中查找这个项目节点的 index
+        auto index = params_.tree_widget->indexOfTopLevelItem(params_.root);
+
+        // 2. 从树控件中删除该节点（释放 UI 资源）
+        delete params_.tree_widget->takeTopLevelItem(index);
+
+        // 3. 删除对应的磁盘目录（包含已复制文件）
+        QDir(params_.root->getFilePath()).removeRecursively();
+
         return;
     }
 
-    // 线程结束后发送完成信号
-    emit progressFinished(file_count_);
+    // 发出完成信号，包含图片总数
+    emit progressFinished(file_count);
 }
 
-void ProTreeThread::createProTree(const QString &src_path,
-                                  const QString &dist_path,
-                                  ProTreeItem *parent_item, int &file_count,
-                                  QTreeWidget *self, ProTreeItem *root,
-                                  ProTreeItem *prev) {
+// 递归遍历目录，构建对应的项目树节点，并根据需要拷贝文件
+void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
+                             ProTreeItem *parent_item, int &file_count,
+                             ProTreeItem *root, ProTreeItem *&prev) {
     if (stop_)
         return;
 
-    bool need_copy = (src_path != dist_path); // 是否需要拷贝文件
+    // 获取该目录下符合过滤条件的文件信息列表，包括文件和子目录
+    QDir dir(src_path);
+    // 设置过滤规则：只遍历目录和文件，排除 "." 和 ".." 特殊目录
+    dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
+    // 获取该目录下符合过滤条件的文件信息列表，包括文件和子目录
+    QFileInfoList list = dir.entryInfoList();
 
-    QDir import_dir(src_path);
-    import_dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
-    import_dir.setSorting(QDir::Name);
-
-    QFileInfoList list = import_dir.entryInfoList();
-
-    for (const QFileInfo &file_info : list) {
+    // 遍历该目录下的每一个文件或文件夹信息
+    for (const QFileInfo &info : list) {
         if (stop_)
             return;
+        // 取文件或目录名
+        const QString name = info.fileName();
+        // 获取源目录下该文件或目录的绝对路径
+        const QString abs_src_path = info.absoluteFilePath();
+        // 计算目标目录下对应的绝对路径
+        QString abs_dst_path = QDir(dest_path).absoluteFilePath(name);
 
-        if (file_info.isDir()) {
-            // 可拓展递归子目录逻辑（目前未处理子目录）
-
-            if (stop_)
-                return;
-            emit progressUpdated(file_count);
-            QDir dist_dir(dist_path_);
-            QString sub_dist_path = dist_dir.absoluteFilePath(file_info.fileName());
-            QDir sub_dist_dir(sub_dist_path);
-            if (!sub_dist_dir.exists()) {
-                bool ok = sub_dist_dir.mkpath(sub_dist_path);
-                if (!ok)
-                    continue;
-            }
-            auto *item =
-                new ProTreeItem(parent_item, file_info.fileName(), sub_dist_path,
-                                         root, AppConsts::TreeItemType::Directory);
-            item->setData(0, Qt::DisplayRole, file_info.fileName());
-            item->setData(0, Qt::DecorationRole, QIcon(":/icons/dir.png"));
-            item->setData(0, Qt::ToolTipRole, sub_dist_path);
-
-            createProTree(file_info.absoluteFilePath(), sub_dist_path, item,
-                          file_count, self, root, prev);
-
-            continue;
-        }
-
-        // 判断文件后缀是否合法（只接受图片）
-        const QString suffix = file_info.completeSuffix().toLower();
-        if (suffix != "png" && suffix != "jpg" && suffix != "jpeg")
-            continue;
-
-        file_count++;
-        emit progressUpdated(file_count); // 发射进度信号
-
-        QString dist_file_path = file_info.absoluteFilePath();
-
-        // 如果需要拷贝，则执行拷贝到 dist_path 下
-        if (need_copy) {
-            QDir dist_dir(dist_path);
-            dist_file_path = dist_dir.absoluteFilePath(file_info.fileName());
-            if (!QFile::copy(file_info.absoluteFilePath(), dist_file_path)) {
-                qWarning() << "Failed to copy from" << file_info.absoluteFilePath()
-                           << "to" << dist_file_path;
+        // 如果是目录，递归处理
+        if (info.isDir()) {
+            QDir dst(abs_dst_path);
+            // 若目标目录不存在，则尝试创建
+            if (!dst.exists() && !dst.mkpath(abs_dst_path)) {
+                qWarning() << "Failed to create dir:" << abs_dst_path;
                 continue;
             }
+
+            // 创建表示该目录的项目树节点（目录类型）
+            // 注意：不直接操作 UI，UI 线程通过 itemCreated 信号接收节点
+            auto *item = new ProTreeItem(parent_item, name, abs_dst_path, root,
+                                         AppConsts::TreeItemType::Directory);
+            // 设置节点显示名称、图标、鼠标悬停提示
+            item->setData(0, Qt::DisplayRole, name);
+            item->setData(0, Qt::DecorationRole, QIcon(":/icons/dir.png"));
+            item->setData(0, Qt::ToolTipRole, abs_dst_path);
+
+            // 通过信号通知主线程，将该目录节点添加到树控件中
+            emit itemCreated(parent_item, item);
+
+            // 递归调用遍历子目录，构建子树
+            traverse(abs_src_path, abs_dst_path, item, file_count, root, prev);
+        } else {
+            // 当前是文件，先检查文件后缀是否为合法图片格式
+            const QString suffix = info.completeSuffix().toLower();
+            if (!isValidImage(suffix))
+                continue;
+
+            // 根据源目录和目标目录判断是否需要拷贝文件
+            if (!copyIfNeeded(abs_src_path, abs_dst_path))
+                continue;
+
+            // 成功导入一个图片文件，计数器加一
+            file_count++;
+            // 发射进度更新信号，通知主线程刷新进度条等 UI
+            emit progressUpdated(file_count);
+
+            // 创建表示该图片文件的项目树节点（图片类型）
+            auto *item = new ProTreeItem(parent_item, name, abs_dst_path, root,
+                                         AppConsts::TreeItemType::Picture);
+            item->setData(0, Qt::DisplayRole, name);
+            item->setData(0, Qt::DecorationRole, QIcon(":/icons/pic.png"));
+            item->setData(0, Qt::ToolTipRole, abs_dst_path);
+
+            // 维护兄弟节点链表结构：将当前节点的前驱设置为 prev
+            item->setItemPrev(prev);
+            // 如果 prev 不为空，将其后继设置为当前节点，实现双向链表
+            if (prev)
+                prev->setItemNext(item);
+            // 更新 prev，指向当前节点，为下一次循环做准备
+            prev = item;
+
+            // 通过信号通知主线程，将该图片节点添加到树控件中
+            emit itemCreated(parent_item, item);
         }
-
-        // 创建图片项并挂到树中
-        auto *item =
-            new ProTreeItem(parent_item, file_info.fileName(), dist_file_path, root,
-                                     AppConsts::TreeItemType::Picture);
-
-        item->setData(0, Qt::DisplayRole, file_info.fileName());
-        item->setData(0, Qt::DecorationRole, QIcon(":/icons/pic.png"));
-        item->setData(0, Qt::ToolTipRole, dist_file_path);
-
-        // 设置链表前后关系（可用于双向遍历）
-        if (prev) {
-            auto *prev_pro_item = dynamic_cast<ProTreeItem *>(prev);
-            if (prev_pro_item) {
-                prev_pro_item->setItemNext(item);
-            }
-        }
-
-        item->setItemPrev(item); // 当前节点标记自己为前驱（可能是用于链表起点）
-        prev = item;
     }
-
-    // 保留：后续可添加 name_filters 判断或递归目录构建
 }
 
-void ProTreeThread::onProgressCanceled() { this->stop_ = true; }
+// 拷贝文件（如果源路径与目标路径不同）
+bool ProTreeThread::copyIfNeeded(const QString &src, QString &dest) {
+    if (params_.src_path == params_.dest_path)
+        return true; // 同目录无需拷贝
+
+    if (QFile::exists(dest))
+        QFile::remove(dest); // 移除目标已有文件
+
+    if (!QFile::copy(src, dest)) {
+        qWarning() << "Copy failed:" << src << "->" << dest;
+        return false;
+    }
+
+    return true;
+}
+
+// 检查是否是支持的图片格式
+bool ProTreeThread::isValidImage(const QString &suffix) const {
+    static const QSet<QString> image_types = {"png", "jpg", "jpeg"};
+    return image_types.contains(suffix);
+}
+
+// 设置线程终止标志
+void ProTreeThread::onProgressCanceled() { stop_ = true; }

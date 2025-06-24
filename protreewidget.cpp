@@ -101,21 +101,22 @@ void ProTreeWidget::onImportProject() {
     if (!project_item)
         return;
 
-    // 获取该节点的基础路径，作为导入的目标路径
-    const QString base_path = project_item->getFilePath();
+    // 该节点的路径作为导入的目标路径
+    const QString dest_path = project_item->getFilePath();
 
     // 弹出目录选择对话框，获取用户选择的导入路径
-    const QString import_path = selectImportDirectory(base_path);
-    if (import_path.isEmpty())
+    const QString src_path = selectImportDirectory(dest_path);
+    if (src_path.isEmpty())
         return;
 
-    // 初始化文件计数器，用于统计导入的文件数量
-    int file_count = 0;
-
     // 创建导入线程对象，传入导入路径、目标路径、当前节点等参数
-    thread_create_pro_ = std::make_shared<ProTreeThread>(
-        std::ref(import_path), std::ref(base_path), project_item, file_count,
-        this, project_item, nullptr);
+    ProTreeThreadParams params{.src_path = src_path,
+                               .dest_path = dest_path,
+                               .parent_item = project_item,
+                               .tree_widget = this,
+                               .root = project_item};
+
+    thread_create_pro_ = std::make_shared<ProTreeThread>(params);
 
     // 连接导入线程的相关信号（进度更新、完成、取消等）
     connectThreadSignals();
@@ -141,13 +142,29 @@ QString ProTreeWidget::selectImportDirectory(const QString &initial_path) {
 
     return QString();
 }
+
 void ProTreeWidget::connectThreadSignals() {
+    // 获取线程指针，方便后续信号连接
     auto *thread = thread_create_pro_.get();
 
+    // 连接线程的 itemCreated 信号到一个 lambda 槽函数
+    // 每当线程创建一个新的 ProTreeItem 时，主线程收到信号，
+    // 将这个新节点添加为其父节点的子节点，从而在 UI 树中动态构建树形结构
+    connect(thread, &ProTreeThread::itemCreated, this,
+            [](ProTreeItem *parent, ProTreeItem *item) {
+        if (parent && item)       // 确保指针有效
+            parent->addChild(item); // 将新节点插入父节点
+    });
+
+    // 实时刷新 UI 上的进度显示
     connect(thread, &ProTreeThread::progressUpdated, this,
             &ProTreeWidget::onProgressUpdated);
+
+    // 更新 UI 状态，关闭进度对话框等
     connect(thread, &ProTreeThread::progressFinished, this,
             &ProTreeWidget::onProgressFinished);
+
+    // 用户点击取消时，触发此信号通知线程停止操作，实现线程安全取消
     connect(this, &ProTreeWidget::progressCanceled, thread,
             &ProTreeThread::onProgressCanceled);
 }
@@ -167,15 +184,18 @@ void ProTreeWidget::showProgressDialog() {
 void ProTreeWidget::onProgressUpdated(int count) {
     if (!dialog_progress_)
         return;
-    if (count >= AppConsts::UIConfig::ProgressMax) {
-        dialog_progress_->setValue(count % AppConsts::UIConfig::ProgressMax);
-    } else {
-    }
+    dialog_progress_->setMaximum(
+        AppConsts::UIConfig::ProgressMax); // 或任意足够大的数
+    dialog_progress_->setValue(count);
 }
 
 void ProTreeWidget::onProgressFinished() {
     dialog_progress_->setValue(AppConsts::UIConfig::ProgressMax);
     dialog_progress_->deleteLater();
+    dialog_progress_ = nullptr;
+
+    // 释放线程对象
+    thread_create_pro_.reset();
 }
 
 void ProTreeWidget::onProgressCanceled() {
