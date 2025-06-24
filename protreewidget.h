@@ -16,12 +16,14 @@ public:
 private:
     // 用于记录已经添加过的完整路径，防止重复添加
     QSet<QString> set_path_;
-    QAction *action_import_;
-    QAction *action_set_start_;
-    QAction *action_close_pro_;
-    QAction *action_slide_show_;
-    ProTreeItem *right_clicked_item_;
-    QProgressDialog *dialog_progress_;
+    QAction *action_import_ = nullptr;
+    QAction *action_set_start_ = nullptr;
+    QAction *action_close_pro_ = nullptr;
+    QAction *action_slide_show_ = nullptr;
+    ProTreeItem *right_clicked_item_ = nullptr;
+    // 当前活动项目
+    ProTreeItem *active_item_ = nullptr;
+    QProgressDialog *dialog_progress_ = nullptr;
     std::shared_ptr<ProTreeThread> thread_create_pro_;
 
     void initActions();
@@ -38,6 +40,12 @@ private slots:
     void onItemPressed(QTreeWidgetItem *item, int column);
     // 用户右键选择“导入文件”动作时触发，启动导入目录线程
     void onImportProject();
+    // 设置活动项目
+    void onSetActiveProject();
+    // 关闭项目
+    void onCloseProject();
+    // 启动幻灯片
+    void onStartSlideshow();
     // 导入线程发出进度更新信号时调用，更新进度条显示（当前导入的文件数）
     void onProgressUpdated(int count);
     // 导入线程完成时触发，关闭并销毁进度条对话框

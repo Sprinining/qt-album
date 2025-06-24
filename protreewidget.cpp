@@ -55,17 +55,15 @@ void ProTreeWidget::initSignals() {
     connect(this, &ProTreeWidget::itemPressed, this,
             &ProTreeWidget::onItemPressed);
 
+    // 连接四个菜单项的槽函数
     connect(action_import_, &QAction::triggered, this,
             &ProTreeWidget::onImportProject);
-
-    // connect(act_set_start, &QAction::triggered, this,
-    // &ProTreeWidget::setAsActive);
-
-    // connect(act_close_pro, &QAction::triggered, this,
-    // &ProTreeWidget::closeProject);
-
-    // connect(act_slide_show, &QAction::triggered, this,
-    // &ProTreeWidget::startSlideshow);
+    connect(action_set_start_, &QAction::triggered, this,
+            &ProTreeWidget::onSetActiveProject);
+    connect(action_close_pro_, &QAction::triggered, this,
+            &ProTreeWidget::onCloseProject);
+    connect(action_slide_show_, &QAction::triggered, this,
+            &ProTreeWidget::onStartSlideshow);
 }
 
 void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
@@ -127,6 +125,28 @@ void ProTreeWidget::onImportProject() {
     // 显示导入进度对话框，支持取消操作
     showProgressDialog();
 }
+
+void ProTreeWidget::onSetActiveProject() {
+    if (!right_clicked_item_)
+        return;
+
+    // 先把之前的激活项字体还原
+    if (active_item_ && active_item_ != right_clicked_item_) {
+        QFont font = active_item_->font(0);
+        font.setBold(false);
+        active_item_->setFont(0, font);
+    }
+
+    // 设置新的激活项字体加粗
+    active_item_ = right_clicked_item_;
+    QFont font = active_item_->font(0);
+    font.setBold(true);
+    active_item_->setFont(0, font);
+}
+
+void ProTreeWidget::onCloseProject() { qDebug() << "onCloseProject"; }
+
+void ProTreeWidget::onStartSlideshow() { qDebug() << "onStartSlideshow"; }
 
 QString ProTreeWidget::selectImportDirectory(const QString &initial_path) {
 
