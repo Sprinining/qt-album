@@ -52,7 +52,7 @@ void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
     // 设置过滤规则：只遍历目录和文件，排除 "." 和 ".." 特殊目录
     dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
     // 获取该目录下符合过滤条件的文件信息列表，包括文件和子目录
-    QFileInfoList list = dir.entryInfoList();
+    const QFileInfoList &list = dir.entryInfoList();
 
     // 遍历该目录下的每一个文件或文件夹信息
     for (const QFileInfo &info : list) {
@@ -152,7 +152,7 @@ int ProTreeThread::countImages(const QString &path) const {
 
     QDir dir(path);
     dir.setFilter(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot);
-    QFileInfoList list = dir.entryInfoList();
+    const QFileInfoList &list = dir.entryInfoList();
 
     for (const QFileInfo &info : list) {
         if (info.isDir()) {
