@@ -22,12 +22,12 @@ public:
 private:
     Ui::MainWindow *ui;
     // 屏幕左侧的项目树对话框
-    ProTreeDialog *protree_dialog_;
-    QMenu *menu_file_;
-    QMenu *menu_set_;
-    QAction *action_create_pro_;
-    QAction *action_open_pro_;
-    QAction *action_music_;
+    ProTreeDialog *protree_dialog_ = nullptr;
+    QMenu *menu_file_ = nullptr;
+    QMenu *menu_set_ = nullptr;
+    QAction *action_create_pro_ = nullptr;
+    QAction *action_open_pro_ = nullptr;
+    QAction *action_music_ = nullptr;
 
     void initMenus();
     void initActions();

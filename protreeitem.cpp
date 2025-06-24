@@ -4,13 +4,13 @@
 ProTreeItem::ProTreeItem(QTreeWidget *treeview, const QString &name,
                          const QString &file_path, AppConsts::TreeItemType type)
     : QTreeWidgetItem(treeview, static_cast<int>(type)), file_path_(file_path),
-    name_(name), item_root_(this), item_prev_(nullptr), item_next_(nullptr) {}
+    name_(name), item_root_(this) {}
 // 父节点parent作为父对象，加入父节点的子列表
 ProTreeItem::ProTreeItem(ProTreeItem *parent, const QString &name,
                          const QString &file_path, ProTreeItem *root,
                          AppConsts::TreeItemType type)
     : QTreeWidgetItem(parent, static_cast<int>(type)), file_path_(file_path),
-    name_(name), item_root_(root), item_prev_(nullptr), item_next_(nullptr) {}
+    name_(name), item_root_(root) {}
 
 const QString &ProTreeItem::getFilePath() const { return file_path_; }
 

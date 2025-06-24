@@ -8,12 +8,13 @@ class ProTreeItem : public QTreeWidgetItem {
 public:
     // 创建顶层节点：指定树控件指针 treeview、节点显示名称 name、路径 file_path
     // 和节点类型 type
-    ProTreeItem(QTreeWidget *treeview, const QString &name, const QString &file_path,
+    ProTreeItem(QTreeWidget *treeview, const QString &name,
+                const QString &file_path,
                 AppConsts::TreeItemType type = AppConsts::TreeItemType::Project);
 
     // 创建子节点：指定父节点、节点显示名称、路径、根节点指针和节点类型
-    ProTreeItem(ProTreeItem *parent, const QString &name, const QString &file_path,
-                ProTreeItem *root,
+    ProTreeItem(ProTreeItem *parent, const QString &name,
+                const QString &file_path, ProTreeItem *root,
                 AppConsts::TreeItemType type = AppConsts::TreeItemType::Project);
 
     const QString &getFilePath() const;
@@ -28,8 +29,8 @@ public:
 
 private:
     QString file_path_; // 节点对应的路径
-    QString name_; // 节点名称
-    ProTreeItem *item_root_;
-    ProTreeItem *item_prev_;
-    ProTreeItem *item_next_;
+    QString name_;      // 节点名称
+    ProTreeItem *item_root_ = nullptr;
+    ProTreeItem *item_prev_ = nullptr;
+    ProTreeItem *item_next_ = nullptr;
 };

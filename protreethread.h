@@ -9,11 +9,11 @@
 
 // 构造参数结构体
 struct ProTreeThreadParams {
-    QString src_path;         // 导入的源目录路径
-    QString dest_path;        // 拷贝后的目标目录路径
-    ProTreeItem *parent_item; // 要插入子节点的父项目节点
-    QTreeWidget *tree_widget; // 指向当前树控件本体
-    ProTreeItem *root;        // 根节点（用于顶层构建或清理）
+    QString src_path;                   // 导入的源目录路径
+    QString dest_path;                  // 拷贝后的目标目录路径
+    ProTreeItem *parent_item = nullptr; // 要插入子节点的父项目节点
+    QTreeWidget *tree_widget = nullptr; // 指向当前树控件本体
+    ProTreeItem *root = nullptr;        // 根节点（用于顶层构建或清理）
 };
 
 class ProTreeThread : public QThread {
