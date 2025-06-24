@@ -10,8 +10,9 @@ class ProTreeWidget : public QTreeWidget {
     Q_OBJECT
 public:
     explicit ProTreeWidget(QWidget *parent = nullptr);
-    // 向树中添加一个项目节点，参数 name 为项目名称，dir_path 为项目所在目录
-    void addProjectToTree(const QString &name, const QString &dir_path);
+    // 向树中添加一个项目节点，参数 name 为项目名称，dir_path
+    // 为项目所在目录，返回新添加的节点
+    ProTreeItem *addProjectToTree(const QString &name, const QString &dir_path);
     // 打开项目
     void openProject(const QString &dir_path);
 

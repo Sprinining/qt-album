@@ -16,18 +16,19 @@ ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
 }
 
 // 添加一个项目节点到树形控件中
-void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
+ProTreeItem *ProTreeWidget::addProjectToTree(const QString &name,
+                                             const QString &path) {
     // 拼接绝对路径（完整项目路径 = 路径 + 项目名）
     const QString file_path = QDir(path).absoluteFilePath(name);
 
     // 避免重复添加
     if (paths_.contains(file_path))
-        return;
+        return nullptr;
 
     // 如果目录不存在，尝试创建（确保物理路径存在）
     QDir pro_dir(file_path);
     if (!pro_dir.exists() && !pro_dir.mkpath("."))
-        return;
+        return nullptr;
 
     // 加到 set 中，防止重复
     paths_.insert(file_path);
@@ -38,6 +39,8 @@ void ProTreeWidget::addProjectToTree(const QString &name, const QString &path) {
     item->setData(0, Qt::DisplayRole, name);
     item->setData(0, Qt::DecorationRole, QIcon(":/icons/dir.png"));
     item->setData(0, Qt::ToolTipRole, file_path);
+
+    return item;
 }
 
 void ProTreeWidget::initActions() {
@@ -119,10 +122,8 @@ void ProTreeWidget::onImportProject() {
 
     // 连接导入线程的相关信号（进度更新、完成、取消等）
     connectThreadSignals();
-
     // 启动导入线程，开始执行导入任务
     thread_create_pro_->start();
-
     // 显示导入进度对话框，支持取消操作
     showProgressDialog();
 }
@@ -150,18 +151,19 @@ void ProTreeWidget::onCloseProject() {
     if (!right_clicked_item_)
         return;
 
-    // 弹出确认对话框（模态）
-    RemoveProDialog remove_pro_dialog(this);
-    if (remove_pro_dialog.exec() != QDialog::Accepted)
-        return;
-
     // 获取目标路径并从集合中移除
     const QString delete_path = right_clicked_item_->getFilePath();
     paths_.remove(delete_path);
 
-    // 删除本地文件（如果勾选）
-    if (remove_pro_dialog.shouldDeleteLocalFile())
-        QDir(delete_path).removeRecursively();
+    // 如果是创建的项目，就弹出自定义的对话框，提供删除本地文件的可选功能
+    if (right_clicked_item_->getSource() == AppConsts::ProjectSource::Created) {
+        RemoveProDialog remove_pro_dialog(this);
+        if (remove_pro_dialog.exec() != QDialog::Accepted)
+            return;
+        // 删除本地文件（如果勾选）
+        if (remove_pro_dialog.shouldDeleteLocalFile())
+            QDir(delete_path).removeRecursively();
+    }
 
     // 处理 UI：清除 active 项、删除树节点
     const int index = this->indexOfTopLevelItem(right_clicked_item_);
@@ -219,9 +221,29 @@ void ProTreeWidget::connectThreadSignals() {
 }
 
 void ProTreeWidget::openProject(const QString &dir_path) {
-    qDebug() << dir_path;
-    if (paths_.contains(dir_path))
+    QFileInfo info(dir_path);
+    QString name = info.fileName();
+    QString parent_path = info.absolutePath();
+
+    // 添加顶层项目节点
+    ProTreeItem *project_item = addProjectToTree(name, parent_path);
+    // 标记一下这个项目是导入的，后续关闭项目时，不能提供删除本地文件的功能
+    project_item->setSource(AppConsts::ProjectSource::Imported);
+    if (!project_item)
         return;
+
+    // 构造线程参数
+    ProTreeThreadParams params{.src_path = dir_path,
+                               .dest_path = dir_path,
+                               .parent_item = project_item,
+                               .tree_widget = this,
+                               .root = project_item,
+                               .operation = AppConsts::ProjectOperation::Import};
+
+    thread_create_pro_ = std::make_shared<ProTreeThread>(params);
+    connectThreadSignals();
+    thread_create_pro_->start();
+    showProgressDialog();
 }
 
 void ProTreeWidget::showProgressDialog() {
