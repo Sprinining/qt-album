@@ -33,6 +33,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         consts.h
         protreethread.h protreethread.cpp
         removeprodialog.h removeprodialog.cpp removeprodialog.ui
+        picshowdialog.h picshowdialog.cpp picshowdialog.ui
+        picbutton.h picbutton.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
