@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "picshowdialog.h"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +25,8 @@ private:
     Ui::MainWindow *ui;
     // 屏幕左侧的项目树对话框
     ProTreeDialog *protree_dialog_ = nullptr;
+    // 右侧的图片展示区
+    PicShowDialog *pic_show_dialog_ = nullptr;
     QMenu *menu_file_ = nullptr;
     QMenu *menu_set_ = nullptr;
     QAction *action_create_pro_ = nullptr;

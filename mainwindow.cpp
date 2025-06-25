@@ -45,6 +45,9 @@ void MainWindow::initActions() {
 void MainWindow::initDialog() {
     protree_dialog_ = new ProTreeDialog(this);
     ui->verticalLayoutPro->addWidget(protree_dialog_);
+
+    pic_show_dialog_ = new PicShowDialog(this);
+    ui->verticalLayoutPic->addWidget(pic_show_dialog_);
 }
 
 void MainWindow::initSignals() {
