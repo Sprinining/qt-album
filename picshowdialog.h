@@ -23,6 +23,9 @@ protected:
 private:
     Ui::PicShowDialog *ui;
 
+    // 要显示的图片的路径
+    QString selected_path_;
+    QPixmap pix_map_;
     // 用于控制两个按钮的透明度效果（淡入淡出）
     QGraphicsOpacityEffect *effect_prev_ = nullptr;
     QGraphicsOpacityEffect *effect_next_ = nullptr;
@@ -38,6 +41,10 @@ private:
                                QPropertyAnimation *&anim);
     // 根据 visible 控制按钮显示或隐藏，并执行淡入淡出动画
     void animateButtons(bool visible);
+
+public slots:
+    // 接收要展示的图片的路径
+    void onImagePathSelected(const QString &file_path);
 };
 
 #endif // PICSHOWDIALOG_H

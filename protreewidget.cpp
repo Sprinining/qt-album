@@ -68,6 +68,10 @@ void ProTreeWidget::initSignals() {
             &ProTreeWidget::onCloseProject);
     connect(action_slide_show_, &QAction::triggered, this,
             &ProTreeWidget::onStartSlideshow);
+
+    // 双击
+    connect(this, &QTreeWidget::itemDoubleClicked, this,
+            &ProTreeWidget::onItemDoubleClicked);
 }
 
 void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
@@ -282,4 +286,20 @@ void ProTreeWidget::onProgressCanceled() {
 void ProTreeWidget::onTotalFileCountCalculated(int total) {
     if (dialog_progress_)
         dialog_progress_->setMaximum(total);
+}
+
+void ProTreeWidget::onItemDoubleClicked(QTreeWidgetItem *item, int column) {
+    // 尝试转换为自定义类型 ProTreeItem
+    ProTreeItem *tree_item = dynamic_cast<ProTreeItem *>(item);
+    if (!tree_item)
+        return;
+
+    // 判断类型是否为图片节点
+    if (tree_item->type() != static_cast<int>(AppConsts::TreeItemType::Picture))
+        return;
+
+    // 记录当前选中项，发出信号
+    selected_item_ = tree_item;
+
+    emit imagePathSelected(tree_item->getFilePath());
 }

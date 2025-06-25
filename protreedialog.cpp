@@ -5,6 +5,9 @@ ProTreeDialog::ProTreeDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::ProTreeDialog) {
     ui->setupUi(this);
     ui->treeWidget->setHeaderLabels(QStringList() << "项目名称");
+    // 信号接力
+    connect(ui->treeWidget, &ProTreeWidget::imagePathSelected, this,
+            &ProTreeDialog::imagePathSelected);
 }
 
 ProTreeDialog::~ProTreeDialog() { delete ui; }

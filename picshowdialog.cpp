@@ -76,3 +76,23 @@ void PicShowDialog::animateButtons(bool visible) {
     // 更新状态标志
     btn_visible_ = visible;
 }
+
+void PicShowDialog::onImagePathSelected(const QString &file_path) {
+    selected_path_ = file_path;
+
+    QPixmap original_pixmap;
+    if (!original_pixmap.load(file_path)) {
+        qWarning() << "Failed to load image:" << file_path;
+        return;
+    }
+
+    // 缩放图片保持宽高比（距离边缘留空 10 像素）
+    const int margin = 10;
+    const QSize target_size = this->size() - QSize(margin * 2, margin * 2);
+    pix_map_ = original_pixmap.scaled(target_size, Qt::KeepAspectRatio,
+                                      Qt::SmoothTransformation);
+
+    ui->label->setAlignment(Qt::AlignCenter);
+    // 显示缩放后的图片
+    ui->label->setPixmap(pix_map_);
+}

@@ -57,6 +57,9 @@ void MainWindow::initSignals() {
             &MainWindow::onOpenProject);
     connect(this, &MainWindow::openProject, protree_dialog_,
             &ProTreeDialog::onOpenProject);
+    // 用于根据选中的图片路径显示图片内容，采用信号接力
+    connect(protree_dialog_, &ProTreeDialog::imagePathSelected, pic_show_dialog_,
+            &PicShowDialog::onImagePathSelected);
 }
 
 void MainWindow::onCreateProject(bool) {
