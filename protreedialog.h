@@ -23,8 +23,14 @@ public slots:
     void onProjectSettingChanged(const QString &name, const QString &dir_path);
     void onOpenProject(const QString &dir_path);
 signals:
-    // 信号接力传递选中的图片的路径
+    // 信号接力部分
+    // 传递选中的图片的路径
     void imagePathSelected(QString file_path);
+    // 传递图片翻页
+    void previousClicked();
+    void nextClicked();
+    // 清除图片区域
+    void clearImageRequested();
 };
 
 #endif // PROTREEDIALOG_H

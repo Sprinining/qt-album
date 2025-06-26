@@ -8,6 +8,12 @@ ProTreeDialog::ProTreeDialog(QWidget *parent)
     // 信号接力
     connect(ui->treeWidget, &ProTreeWidget::imagePathSelected, this,
             &ProTreeDialog::imagePathSelected);
+    connect(this, &ProTreeDialog::previousClicked, ui->treeWidget,
+            &ProTreeWidget::onPreviousClicked);
+    connect(this, &ProTreeDialog::nextClicked, ui->treeWidget,
+            &ProTreeWidget::onNextClicked);
+    connect(ui->treeWidget, &ProTreeWidget::clearImageRequested,
+            this, &ProTreeDialog::clearImageRequested);
 }
 
 ProTreeDialog::~ProTreeDialog() { delete ui; }

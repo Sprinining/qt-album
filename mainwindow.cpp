@@ -20,7 +20,7 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
-    pic_show_dialog_->resizePixmap();  // 只缩放，不重新加载图片
+    pic_show_dialog_->resizePixmap(); // 只缩放，不重新加载图片
 }
 
 void MainWindow::initMenus() {
@@ -65,6 +65,12 @@ void MainWindow::initSignals() {
     // 用于根据选中的图片路径显示图片内容，采用信号接力
     connect(protree_dialog_, &ProTreeDialog::imagePathSelected, pic_show_dialog_,
             &PicShowDialog::onImagePathSelected);
+    connect(pic_show_dialog_, &PicShowDialog::previousClicked, protree_dialog_,
+            &ProTreeDialog::previousClicked);
+    connect(pic_show_dialog_, &PicShowDialog::nextClicked, protree_dialog_,
+            &ProTreeDialog::nextClicked);
+    connect(protree_dialog_, &ProTreeDialog::clearImageRequested,
+            pic_show_dialog_, &PicShowDialog::onClearImageRequested);
 }
 
 void MainWindow::onCreateProject(bool) {

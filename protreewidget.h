@@ -27,7 +27,7 @@ private:
     // 当前活动项目
     ProTreeItem *active_item_ = nullptr;
     // 当前鼠标双击选中的 item
-    ProTreeItem *selected_item_ = nullptr;
+    const ProTreeItem *selected_item_ = nullptr;
     QProgressDialog *dialog_progress_ = nullptr;
     std::shared_ptr<ProTreeThread> thread_create_pro_;
 
@@ -61,12 +61,17 @@ private slots:
     void onTotalFileCountCalculated(int total);
     // 双击响应
     void onItemDoubleClicked(QTreeWidgetItem *item, int column);
+public slots:
+    void onPreviousClicked();
+    void onNextClicked();
 
 signals:
     // 用户提前取消了进度
     void progressCanceled();
     // 发送要展示的图片的路径
     void imagePathSelected(QString file_path);
+    // 清楚图片区域
+    void clearImageRequested();
 };
 
 #endif // PROTREEWIDGET_H

@@ -44,10 +44,15 @@ private:
     // 根据 visible 控制按钮显示或隐藏，并执行淡入淡出动画
     void animateButtons(bool visible);
     void loadImage(const QString &file_path);
+    void initSignals();
 
 public slots:
     // 接收要展示的图片的路径
     void onImagePathSelected(const QString &file_path);
+    void onClearImageRequested();
+signals:
+    void previousClicked();
+    void nextClicked();
 };
 
 #endif // PICSHOWDIALOG_H

@@ -17,6 +17,15 @@ PicShowDialog::PicShowDialog(QWidget *parent)
     setupButtonFadeEffect(ui->pushButtonPrev, effect_prev_, anim_prev_);
     // 初始化“下一张”按钮的透明度效果和动画
     setupButtonFadeEffect(ui->pushButtonNext, effect_next_, anim_next_);
+
+    initSignals();
+}
+
+void PicShowDialog::initSignals() {
+    connect(ui->pushButtonPrev, &QPushButton::clicked, this,
+            &PicShowDialog::previousClicked);
+    connect(ui->pushButtonNext, &QPushButton::clicked, this,
+            &PicShowDialog::nextClicked);
 }
 
 PicShowDialog::~PicShowDialog() { delete ui; }
@@ -122,4 +131,9 @@ void PicShowDialog::animateButtons(bool visible) {
 
 void PicShowDialog::onImagePathSelected(const QString &file_path) {
     loadImage(file_path);
+}
+
+void PicShowDialog::onClearImageRequested() {
+    qDebug() << "xx";
+    selected_path_ = "";
 }

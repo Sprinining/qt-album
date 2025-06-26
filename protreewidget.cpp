@@ -174,6 +174,12 @@ void ProTreeWidget::onCloseProject() {
     if (right_clicked_item_ == active_item_)
         active_item_ = nullptr;
 
+    // 如果当前项目有图片正在展示，取消展示
+    if(selected_item_ && right_clicked_item_->getRoot()){
+        selected_item_ = nullptr;
+        emit clearImageRequested();
+    }
+
     delete this->takeTopLevelItem(index);
     right_clicked_item_ = nullptr;
 }
@@ -302,4 +308,24 @@ void ProTreeWidget::onItemDoubleClicked(QTreeWidgetItem *item, int column) {
     selected_item_ = tree_item;
 
     emit imagePathSelected(tree_item->getFilePath());
+}
+
+void ProTreeWidget::onPreviousClicked() {
+    if (!selected_item_)
+        return;
+    auto *prev_item = selected_item_->getItemPrev();
+    if (!prev_item)
+        return;
+    emit imagePathSelected(prev_item->getFilePath());
+    selected_item_ = prev_item;
+}
+
+void ProTreeWidget::onNextClicked() {
+    if (!selected_item_)
+        return;
+    auto *next_item = selected_item_->getItemNext();
+    if (!next_item)
+        return;
+    emit imagePathSelected(next_item->getFilePath());
+    selected_item_ = next_item;
 }
