@@ -134,6 +134,10 @@ void PicShowDialog::onImagePathSelected(const QString &file_path) {
 }
 
 void PicShowDialog::onClearImageRequested() {
-    qDebug() << "xx";
-    selected_path_ = "";
+    // 清空图片路径
+    selected_path_.clear();
+    // 清除缓存的 pixmap
+    pix_map_ = QPixmap();
+    // 清除 QLabel 显示内容
+    ui->label->clear();
 }
