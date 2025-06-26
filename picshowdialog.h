@@ -15,10 +15,12 @@ class PicShowDialog : public QDialog {
 public:
     explicit PicShowDialog(QWidget *parent = nullptr);
     ~PicShowDialog();
+    void resizePixmap();
 
 protected:
     // 重写事件处理函数，用于处理鼠标进入/离开事件，触发按钮显隐动画
     bool event(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     Ui::PicShowDialog *ui;
@@ -41,6 +43,7 @@ private:
                                QPropertyAnimation *&anim);
     // 根据 visible 控制按钮显示或隐藏，并执行淡入淡出动画
     void animateButtons(bool visible);
+    void loadImage(const QString &file_path);
 
 public slots:
     // 接收要展示的图片的路径

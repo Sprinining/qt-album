@@ -18,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+    pic_show_dialog_->resizePixmap();  // 只缩放，不重新加载图片
+}
+
 void MainWindow::initMenus() {
     initActions();
     // 创建“文件”菜单

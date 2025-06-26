@@ -21,6 +21,49 @@ PicShowDialog::PicShowDialog(QWidget *parent)
 
 PicShowDialog::~PicShowDialog() { delete ui; }
 
+// 加载图片并缓存原图，完成后触发缩放显示
+void PicShowDialog::loadImage(const QString &file_path) {
+    if (file_path.isEmpty())
+        return;
+
+    QPixmap original;
+    if (!original.load(file_path)) { // 从文件加载图片
+        qWarning() << "Failed to load image:" << file_path;
+        return;
+    }
+
+    selected_path_ = file_path; // 记录当前图片路径
+    pix_map_ = original;        // 缓存原始图片
+
+    resizePixmap(); // 缩放图片以适应显示控件
+}
+
+// 重写窗口大小变化事件，动态调整图片缩放
+void PicShowDialog::resizeEvent(QResizeEvent *event) {
+    QDialog::resizeEvent(event); // 调用基类处理
+    resizePixmap();              // 重新缩放图片适应新尺寸
+}
+
+// 根据 QLabel 当前大小（减去边距）缩放 pix_map_ 并显示
+void PicShowDialog::resizePixmap() {
+    if (pix_map_.isNull()) // 无效图片直接返回
+        return;
+
+    const int margin = 10; // 图片留白边距（像素）
+    QSize labelSize = ui->label->size() -
+                      QSize(margin * 2, margin * 2); // 减去左右上下各 margin
+
+    if (labelSize.width() <= 0 || labelSize.height() <= 0) // 防止尺寸非法
+        return;
+
+    // 缩放图片，保持宽高比和平滑变换
+    QPixmap scaled =
+        pix_map_.scaled(labelSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    ui->label->setPixmap(scaled);             // 设置缩放后的图片显示
+    ui->label->setAlignment(Qt::AlignCenter); // 图片居中显示
+}
+
 // 为指定按钮设置透明度效果和淡入淡出动画
 void PicShowDialog::setupButtonFadeEffect(QWidget *button,
                                           QGraphicsOpacityEffect *&effect,
@@ -78,21 +121,5 @@ void PicShowDialog::animateButtons(bool visible) {
 }
 
 void PicShowDialog::onImagePathSelected(const QString &file_path) {
-    selected_path_ = file_path;
-
-    QPixmap original_pixmap;
-    if (!original_pixmap.load(file_path)) {
-        qWarning() << "Failed to load image:" << file_path;
-        return;
-    }
-
-    // 缩放图片保持宽高比（距离边缘留空 10 像素）
-    const int margin = 10;
-    const QSize target_size = this->size() - QSize(margin * 2, margin * 2);
-    pix_map_ = original_pixmap.scaled(target_size, Qt::KeepAspectRatio,
-                                      Qt::SmoothTransformation);
-
-    ui->label->setAlignment(Qt::AlignCenter);
-    // 显示缩放后的图片
-    ui->label->setPixmap(pix_map_);
+    loadImage(file_path);
 }
