@@ -16,14 +16,14 @@ const QString &ProTreeItem::getFilePath() const { return file_path_; }
 
 const QTreeWidgetItem *ProTreeItem::getRoot() const { return item_root_; }
 
-const ProTreeItem *ProTreeItem::getItemPrev() const { return item_prev_; }
+const ProTreeItem *ProTreeItem::getPrevItem() const { return item_prev_; }
 
-const ProTreeItem *ProTreeItem::getItemNext() const { return item_next_; }
+const ProTreeItem *ProTreeItem::getNextItem() const { return item_next_; }
 
 // todo: 函数定义待完善
-const ProTreeItem *ProTreeItem::getFirstItemChild() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getFirstItem() const { return nullptr; }
 
-const ProTreeItem *ProTreeItem::getLastItemChild() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getLastItem() const { return nullptr; }
 
 AppConsts::ProjectSource ProTreeItem::getSource() const { return source_; }
 

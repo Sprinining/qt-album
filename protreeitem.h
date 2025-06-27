@@ -19,10 +19,10 @@ public:
 
     const QString &getFilePath() const;
     const QTreeWidgetItem *getRoot() const;
-    const ProTreeItem *getItemPrev() const;
-    const ProTreeItem *getItemNext() const;
-    const ProTreeItem *getFirstItemChild() const;
-    const ProTreeItem *getLastItemChild() const;
+    const ProTreeItem *getPrevItem() const;
+    const ProTreeItem *getNextItem() const;
+    const ProTreeItem *getFirstItem() const;
+    const ProTreeItem *getLastItem() const;
     AppConsts::ProjectSource getSource() const;
 
     void setItemPrev(ProTreeItem *prev);
