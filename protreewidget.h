@@ -6,6 +6,8 @@
 #include <QProgressDialog>
 #include <QTreeWidget>
 
+class SlideshowDialog;
+
 class ProTreeWidget : public QTreeWidget {
     Q_OBJECT
 public:
@@ -30,6 +32,7 @@ private:
     const ProTreeItem *selected_item_ = nullptr;
     QProgressDialog *dialog_progress_ = nullptr;
     std::shared_ptr<ProTreeThread> thread_create_pro_;
+    std::shared_ptr<SlideshowDialog> slideshow_dialog_;
 
     void initActions();
     void initSignals();
@@ -61,6 +64,8 @@ private slots:
     void onTotalFileCountCalculated(int total);
     // 双击响应
     void onItemDoubleClicked(QTreeWidgetItem *item, int column);
+    // 触发幻灯片
+    void onSlideshowTriggered();
 public slots:
     void onPreviousClicked();
     void onNextClicked();
