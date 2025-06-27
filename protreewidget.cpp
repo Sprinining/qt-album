@@ -174,8 +174,8 @@ void ProTreeWidget::onCloseProject() {
     if (right_clicked_item_ == active_item_)
         active_item_ = nullptr;
 
-    // 如果当前项目有图片正在展示，取消展示
-    if(selected_item_ && right_clicked_item_->getRoot()){
+    // 如果当前项目有图片正在展示，且这个图片所在的项目顶层节点就是右键关闭项目的节点，则取消展示
+    if (selected_item_ && right_clicked_item_ == selected_item_->getRoot()) {
         selected_item_ = nullptr;
         emit clearImageRequested();
     }
