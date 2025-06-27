@@ -237,10 +237,10 @@ void ProTreeWidget::openProject(const QString &dir_path) {
 
     // 添加顶层项目节点
     ProTreeItem *project_item = addProjectToTree(name, parent_path);
-    // 标记一下这个项目是导入的，后续关闭项目时，不能提供删除本地文件的功能
-    project_item->setSource(AppConsts::ProjectSource::Imported);
     if (!project_item)
         return;
+    // 标记一下这个项目是导入的，后续关闭项目时，不能提供删除本地文件的功能
+    project_item->setSource(AppConsts::ProjectSource::Imported);
 
     // 构造线程参数
     ProTreeThreadParams params{.src_path = dir_path,
