@@ -21,8 +21,9 @@ public:
     const QTreeWidgetItem *getRoot() const;
     const ProTreeItem *getPrevItem() const;
     const ProTreeItem *getNextItem() const;
-    const ProTreeItem *getFirstItem() const;
-    const ProTreeItem *getLastItem() const;
+    // 返回当前项目里的第一个图片 item
+    const ProTreeItem *getFirstPicItem() const;
+    const ProTreeItem *getLastPicItem() const;
     AppConsts::ProjectSource getSource() const;
 
     void setItemPrev(ProTreeItem *prev);

@@ -21,9 +21,9 @@ const ProTreeItem *ProTreeItem::getPrevItem() const { return item_prev_; }
 const ProTreeItem *ProTreeItem::getNextItem() const { return item_next_; }
 
 // todo: 函数定义待完善
-const ProTreeItem *ProTreeItem::getFirstItem() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getFirstPicItem() const { return nullptr; }
 
-const ProTreeItem *ProTreeItem::getLastItem() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getLastPicItem() const { return nullptr; }
 
 AppConsts::ProjectSource ProTreeItem::getSource() const { return source_; }
 
