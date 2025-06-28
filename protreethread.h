@@ -41,7 +41,7 @@ private:
                   int &file_count,          // 导入图片总数（引用统计）
                   ProTreeItem *root,        // 根节点（用于回退删除）
                   ProTreeItem *&prev);      // 前一个兄弟节点（构建链表）
-    // 判断是否需要拷贝文件，并执行拷贝
+    // 拷贝文件，如果需要的话
     bool copyIfNeeded(const QString &src, QString &dest);
     // 判断文件是否为支持的图片格式
     bool isValidImage(const QString &suffix) const;

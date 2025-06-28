@@ -90,8 +90,7 @@ void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
             const QString suffix = info.completeSuffix().toLower();
             if (!isValidImage(suffix))
                 continue;
-
-            // 根据源目录和目标目录判断是否需要拷贝文件
+            // 根据源目录和目标目录判断是否需要拷贝文件，如果需要就拷贝，返回处理结果
             if (!copyIfNeeded(abs_src_path, abs_dst_path))
                 continue;
 
@@ -121,7 +120,7 @@ void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
     }
 }
 
-// 判读是否需要拷贝文件
+// 拷贝文件，如果需要的话
 bool ProTreeThread::copyIfNeeded(const QString &src, QString &dest) {
     // 如果是导入操作，直接跳过复制
     if (params_.operation == AppConsts::ProjectOperation::Import)
