@@ -22,6 +22,9 @@ void ProTreeThread::run() {
     traverse(params_.src_path, params_.dest_path, params_.parent_item, file_count,
              params_.root, prev);
 
+    // 记录当前项目的最后一个图片节点
+    params_.root->setLastPicItem(prev);
+
     // 若线程被取消，回滚删除节点和文件夹
     if (stop_) {
         // 1. 从树控件中查找这个项目节点的 index
@@ -105,6 +108,10 @@ void ProTreeThread::traverse(const QString &src_path, const QString &dest_path,
             item->setData(0, Qt::DisplayRole, name);
             item->setData(0, Qt::DecorationRole, QIcon(":/icons/pic.png"));
             item->setData(0, Qt::ToolTipRole, abs_dst_path);
+
+            // 记录当前项目的第一个图片节点
+            if (root->getFirstPicItem() == nullptr)
+                root->setFirstPicItem(item);
 
             // 维护兄弟节点链表结构：将当前节点的前驱设置为 prev
             item->setItemPrev(prev);

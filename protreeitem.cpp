@@ -20,10 +20,13 @@ const ProTreeItem *ProTreeItem::getPrevItem() const { return item_prev_; }
 
 const ProTreeItem *ProTreeItem::getNextItem() const { return item_next_; }
 
-// todo: 函数定义待完善
-const ProTreeItem *ProTreeItem::getFirstPicItem() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getFirstPicItem() const {
+    return item_pic_first_;
+}
 
-const ProTreeItem *ProTreeItem::getLastPicItem() const { return nullptr; }
+const ProTreeItem *ProTreeItem::getLastPicItem() const {
+    return item_pic_last_;
+}
 
 AppConsts::ProjectSource ProTreeItem::getSource() const { return source_; }
 
@@ -34,3 +37,7 @@ void ProTreeItem::setItemNext(ProTreeItem *next) { item_next_ = next; }
 void ProTreeItem::setSource(AppConsts::ProjectSource source) {
     source_ = source;
 }
+
+void ProTreeItem::setFirstPicItem(ProTreeItem *item) { item_pic_first_ = item; }
+
+void ProTreeItem::setLastPicItem(ProTreeItem *item) { item_pic_last_ = item; }

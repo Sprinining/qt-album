@@ -30,12 +30,17 @@ public:
     void setItemNext(ProTreeItem *next);
     void setSource(AppConsts::ProjectSource source);
 
+    void setFirstPicItem(ProTreeItem *item);
+    void setLastPicItem(ProTreeItem *item);
+
 private:
     QString file_path_; // 节点对应的路径
     QString name_;      // 节点名称
     ProTreeItem *item_root_ = nullptr;
     ProTreeItem *item_prev_ = nullptr;
     ProTreeItem *item_next_ = nullptr;
+    ProTreeItem *item_pic_first_ = nullptr;
+    ProTreeItem *item_pic_last_ = nullptr;
     // 项目源是导入还是创建的
     AppConsts::ProjectSource source_ = AppConsts::ProjectSource::Created;
 };
