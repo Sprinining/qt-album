@@ -198,6 +198,7 @@ void ProTreeWidget::onStartSlideshow() {
     slideshow_dialog_ =
         std::make_shared<SlideshowDialog>(first_item, last_item, this);
     slideshow_dialog_->setModal(true);
+    // todo: Painter not active
     // slideshow_dialog_->showMaximized();
     slideshow_dialog_->show();
 }
