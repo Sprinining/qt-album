@@ -31,16 +31,40 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonPlay">
+       <widget class="ToggleImageButton" name="pushButtonPlay">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
         <property name="text">
-         <string>播放</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonStop">
+       <widget class="ImageButton" name="pushButtonStop">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
         <property name="text">
-         <string>关闭</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -66,9 +90,21 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QPushButton" name="pushButtonPrev">
+          <widget class="ImageButton" name="pushButtonPrev">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="text">
-            <string>上一页</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -94,9 +130,21 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QPushButton" name="pushButtonNext">
+          <widget class="ImageButton" name="pushButtonNext">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="text">
-            <string>下一页</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -123,28 +171,24 @@
           <height>80</height>
          </size>
         </property>
-        <widget class="QListWidget" name="listWidget">
-         <property name="geometry">
-          <rect>
-           <x>5</x>
-           <y>5</y>
-           <width>161</width>
-           <height>70</height>
-          </rect>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>70</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>70</height>
-          </size>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QListWidget" name="listWidget">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>70</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>70</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -152,6 +196,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ImageButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">imagebutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ToggleImageButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">toggleimagebutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

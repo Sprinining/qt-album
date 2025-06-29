@@ -36,6 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         picshowdialog.h picshowdialog.cpp picshowdialog.ui
         imagebutton.h imagebutton.cpp
         slideshowdialog.h slideshowdialog.cpp slideshowdialog.ui
+        toggleimagebutton.h toggleimagebutton.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

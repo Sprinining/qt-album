@@ -22,6 +22,8 @@ private:
     Ui::SlideshowDialog *ui;
     const ProTreeItem *first_item_ = nullptr;
     const ProTreeItem *last_item_ = nullptr;
+
+    void initButtonIcons();
 };
 
 #endif // SLIDESHOWDIALOG_H
