@@ -64,8 +64,6 @@ private slots:
     void onTotalFileCountCalculated(int total);
     // 双击响应
     void onItemDoubleClicked(QTreeWidgetItem *item, int column);
-    // 触发幻灯片
-    void onSlideshowTriggered();
 public slots:
     void onPreviousClicked();
     void onNextClicked();

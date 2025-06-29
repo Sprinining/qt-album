@@ -112,7 +112,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widgetAnimation" native="true"/>
+       <widget class="AnimationWidget" name="widgetAnimation" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>200</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QWidget" name="widgetSlideshowNext" native="true">
@@ -206,6 +213,12 @@
    <class>ToggleImageButton</class>
    <extends>QPushButton</extends>
    <header location="global">toggleimagebutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AnimationWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">animationwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -73,9 +73,6 @@ void ProTreeWidget::initSignals() {
     // 双击
     connect(this, &QTreeWidget::itemDoubleClicked, this,
             &ProTreeWidget::onItemDoubleClicked);
-
-    connect(action_slide_show_, &QAction::triggered, this,
-            &ProTreeWidget::onSlideshowTriggered);
 }
 
 void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
@@ -188,7 +185,22 @@ void ProTreeWidget::onCloseProject() {
     right_clicked_item_ = nullptr;
 }
 
-void ProTreeWidget::onStartSlideshow() { qDebug() << "onStartSlideshow"; }
+void ProTreeWidget::onStartSlideshow() {
+    if (!right_clicked_item_)
+        return;
+    auto *first_item = right_clicked_item_->getFirstPicItem();
+    if (!first_item)
+        return;
+    auto *last_item = right_clicked_item_->getLastPicItem();
+    if (!last_item)
+        return;
+
+    slideshow_dialog_ =
+        std::make_shared<SlideshowDialog>(first_item, last_item, this);
+    slideshow_dialog_->setModal(true);
+    // slideshow_dialog_->showMaximized();
+    slideshow_dialog_->show();
+}
 
 QString ProTreeWidget::selectImportDirectory(const QString &initial_path) {
 
@@ -312,22 +324,6 @@ void ProTreeWidget::onItemDoubleClicked(QTreeWidgetItem *item, int column) {
     selected_item_ = tree_item;
 
     emit imagePathSelected(tree_item->getFilePath());
-}
-
-void ProTreeWidget::onSlideshowTriggered() {
-    if (!right_clicked_item_)
-        return;
-    auto *first_item = right_clicked_item_->getFirstPicItem();
-    if (!first_item)
-        return;
-    auto *last_item = right_clicked_item_->getLastPicItem();
-    if (!last_item)
-        return;
-
-    slideshow_dialog_ =
-        std::make_shared<SlideshowDialog>(first_item, last_item, this);
-    slideshow_dialog_->setModal(true);
-    slideshow_dialog_->showMaximized();
 }
 
 void ProTreeWidget::onPreviousClicked() {
