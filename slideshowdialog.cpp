@@ -17,6 +17,11 @@ SlideshowDialog::SlideshowDialog(const ProTreeItem *first_item,
 
 SlideshowDialog::~SlideshowDialog() { delete ui; }
 
+void SlideshowDialog::closeEvent(QCloseEvent *event) {
+    ui->widgetAnimation->stopAnimation(); // 安全释放动画资源
+    QDialog::closeEvent(event);           // 保留默认行为
+}
+
 void SlideshowDialog::initButtonIcons() {
     ui->pushButtonPrev->setIcons(":/icons/previous.png",
                                  ":/icons/previous_hover.png",
@@ -34,8 +39,24 @@ void SlideshowDialog::initButtonIcons() {
 }
 
 void SlideshowDialog::initSignals() {
+    connect(ui->pushButtonStop, &QPushButton::clicked, this,
+            &SlideshowDialog::close);
+    connect(ui->pushButtonPrev, &QPushButton::clicked, this,
+            &SlideshowDialog::onPrevButtonClicked);
+    connect(ui->pushButtonNext, &QPushButton::clicked, this,
+            &SlideshowDialog::onNextButtonClicked);
     connect(ui->widgetAnimation, &AnimationWidget::updatePreviewList,
             ui->listWidget, &PreviewListWidget::onUpdatePreviewList);
     connect(ui->widgetAnimation, &AnimationWidget::previewListItemSelected,
             ui->listWidget, &PreviewListWidget::onPreviewListItemSelected);
+    connect(ui->listWidget, &PreviewListWidget::showSelectedItem,
+            ui->widgetAnimation, &AnimationWidget::onShowSelectedItem);
+}
+
+void SlideshowDialog::onPrevButtonClicked() {
+    ui->widgetAnimation->slidePrev();
+}
+
+void SlideshowDialog::onNextButtonClicked() {
+    ui->widgetAnimation->slideNext();
 }

@@ -18,6 +18,9 @@ public:
                              QWidget *parent = nullptr);
     ~SlideshowDialog();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
     Ui::SlideshowDialog *ui;
     const ProTreeItem *first_item_ = nullptr;
@@ -25,6 +28,9 @@ private:
 
     void initButtonIcons();
     void initSignals();
+private slots:
+    void onPrevButtonClicked();
+    void onNextButtonClicked();
 };
 
 #endif // SLIDESHOWDIALOG_H

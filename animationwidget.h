@@ -20,6 +20,8 @@ public:
     void startAnimation();
     // 停止动画播放
     void stopAnimation();
+    void slidePrev();
+    void slideNext();
 
 protected:
     // 重写绘图事件，实现渐变绘制
@@ -49,6 +51,8 @@ private:
     const ProTreeItem *current_item_ = nullptr;
     // 缓存路径和对应图片项，避免重复加载
     QMap<QString, const ProTreeItem *> item_cache_;
+
+    void slideTo(const ProTreeItem *target);
 
 private slots:
     // 动画定时器超时槽，更新融合因子，触发重绘

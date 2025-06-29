@@ -71,6 +71,36 @@ void AnimationWidget::stopAnimation() {
     update();
 }
 
+// 切换至指定图片项（用于上一张或下一张切换）
+void AnimationWidget::slideTo(const ProTreeItem *target) {
+    // 停止当前动画（防止重叠播放）
+    stopAnimation();
+
+    // 判空，避免非法访问
+    if (!target)
+        return;
+
+    // 设置新的图片项，准备动画渲染
+    setPixmap(target);
+
+    // 请求重绘，立即更新界面显示
+    update();
+}
+
+// 切换到上一张图片
+void AnimationWidget::slidePrev() {
+    // 如果当前图片项存在，则尝试切换到其前一项
+    if (current_item_)
+        slideTo(current_item_->getPrevItem());
+}
+
+// 切换到下一张图片
+void AnimationWidget::slideNext() {
+    // 如果当前图片项存在，则尝试切换到其后一项
+    if (current_item_)
+        slideTo(current_item_->getNextItem());
+}
+
 // 重写绘图事件，实现当前图片和平滑过渡到下一张图片的透明度渐变叠加绘制
 void AnimationWidget::paintEvent(QPaintEvent *) {
     // 第1步：创建绘图对象，准备在控件上绘制
