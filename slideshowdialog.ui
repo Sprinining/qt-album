@@ -169,29 +169,35 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>80</height>
+          <height>120</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>80</height>
+          <height>120</height>
          </size>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QListWidget" name="listWidget">
+          <widget class="PreviewListWidget" name="listWidget">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>70</height>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>70</height>
+             <height>100</height>
             </size>
+           </property>
+           <property name="flow">
+            <enum>QListView::Flow::LeftToRight</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::ViewMode::IconMode</enum>
            </property>
           </widget>
          </item>
@@ -219,6 +225,11 @@
    <extends>QWidget</extends>
    <header location="global">animationwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PreviewListWidget</class>
+   <extends>QListWidget</extends>
+   <header location="global">previewlistwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
