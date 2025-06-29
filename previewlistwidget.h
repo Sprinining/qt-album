@@ -27,6 +27,11 @@ public slots:
     // 接收外部通知更新预览列表，参数为 ProTreeItem 指针
     void onUpdatePreviewList(const ProTreeItem *item);
     void onPreviewListItemSelected(const ProTreeItem *);
+    // 预览项被点击
+    void onItemPressed(QListWidgetItem *item);
+signals:
+    // 选中预览列表的图片，在幻灯片中展示
+    void showSelectedItem(QString path);
 };
 
 #endif // PREVIEWLISTWIDGET_H

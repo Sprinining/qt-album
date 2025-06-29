@@ -229,3 +229,31 @@ void AnimationWidget::onPauseTimeout() {
         animation_timer_->start(30);
     }
 }
+
+void AnimationWidget::onShowSelectedItem(const QString &path) {
+    // 从缓存中查找对应项
+    auto cache_iter = item_cache_.find(path);
+    if (cache_iter == item_cache_.end())
+        return;
+
+    const ProTreeItem *item = cache_iter.value();
+    if (!item)
+        return;
+    // 加载当前图片，如果失败则返回
+    if (!from_pixmap_.load(path))
+        return;
+    current_item_ = item;
+    // 若未缓存该路径项，则加入缓存
+    item_cache_.insert(path, item); // 若已存在，Qt 会自动忽略
+
+    // 获取下一张图片项
+    const ProTreeItem *next_item = item->getNextItem();
+    if (!next_item)
+        return;
+    const QString &next_path = next_item->getFilePath();
+    if (next_path.isEmpty() || !to_pixmap_.load(next_path))
+        return;
+    item_cache_.insert(next_path, next_item); // 同样自动忽略已存在项
+
+    update(); // 触发重绘显示图片
+}

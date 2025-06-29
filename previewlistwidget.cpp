@@ -1,6 +1,7 @@
 #include "previewlistwidget.h"
 
 #include "previewlistitem.h"
+#include <QGuiApplication>
 #include <QPainter>
 
 // 构造函数，初始化 QListWidget，设置视图模式、图标大小和间距
@@ -12,6 +13,9 @@ PreviewListWidget::PreviewListWidget(QWidget *parent) : QListWidget(parent) {
     setIconSize(QSize(AppConsts::UIConfig::PreviewListItemSize,
                       AppConsts::UIConfig::PreviewListItemSize)); // 设置图标大小
     setSpacing(5);                                                // 设置图标间距
+
+    connect(this, &PreviewListWidget::itemPressed, this,
+            &PreviewListWidget::onItemPressed);
 }
 
 // 析构函数，清空缓存
@@ -109,4 +113,21 @@ void PreviewListWidget::onPreviewListItemSelected(const ProTreeItem *item) {
 
     // 设置选中项
     this->setCurrentItem(preview_item);
+}
+
+void PreviewListWidget::onItemPressed(QListWidgetItem *item) {
+    // 仅处理左键点击
+    if (QGuiApplication::mouseButtons() != Qt::LeftButton)
+        return;
+
+    // 安全转换，确保 item 是 PreviewListItem 类型
+    auto *clicked_item = dynamic_cast<PreviewListItem *>(item);
+    if (!clicked_item)
+        return;
+
+    // 设置当前选中项
+    setCurrentItem(clicked_item);
+
+    // 发射选中项的路径信号
+    emit showSelectedItem(clicked_item->getPath());
 }

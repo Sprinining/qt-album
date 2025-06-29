@@ -59,6 +59,9 @@ private slots:
     void onTimeout();
     // 停顿定时器超时槽，切换到下一张图片并恢复动画
     void onPauseTimeout();
+public slots:
+    // 展示出预览列表选中的图片
+    void onShowSelectedItem(const QString &path);
 
 signals:
     // 更新预览列表
