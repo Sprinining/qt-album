@@ -5,6 +5,9 @@
 
 // 构造函数，初始化 QListWidget，设置视图模式、图标大小和间距
 PreviewListWidget::PreviewListWidget(QWidget *parent) : QListWidget(parent) {
+    setWrapping(false); // 禁止自动换行
+    setFlow(QListView::LeftToRight);
+    setResizeMode(QListView::Adjust);
     setViewMode(QListWidget::IconMode); // 图标视图模式
     setIconSize(QSize(AppConsts::UIConfig::PreviewListItemSize,
                       AppConsts::UIConfig::PreviewListItemSize)); // 设置图标大小
@@ -80,4 +83,30 @@ void PreviewListWidget::onUpdatePreviewList(const ProTreeItem *item) {
 
     // 添加新预览项
     addListItem(path);
+}
+
+void PreviewListWidget::onPreviewListItemSelected(const ProTreeItem *item) {
+    if (!item)
+        return;
+
+    const QString &path = item->getFilePath();
+    auto it = item_cache_.find(path);
+    if (it == item_cache_.end())
+        return;
+
+    PreviewListItem *preview_item = it.value();
+    int index = preview_item->getIndex();
+
+    if (index > AppConsts::UIConfig::PreviewListMaxLength) {
+        int offset =
+            (index - last_index_) * AppConsts::UIConfig::PreviewListItemSize;
+        QPoint current_pos = this->pos();
+        this->move(current_pos.x() - offset, current_pos.y());
+    } else {
+        this->move(position_);
+        last_index_ = AppConsts::UIConfig::PreviewListMaxLength;
+    }
+
+    // 设置选中项
+    this->setCurrentItem(preview_item);
 }

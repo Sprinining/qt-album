@@ -31,6 +31,7 @@ void AnimationWidget::setPixmap(const ProTreeItem *item) {
         // 发送信号，更新预览列表
         emit updatePreviewList(item);
     }
+    emit previewListItemSelected(item);
 
     // 预加载下一张图片，准备动画渐变
     const ProTreeItem *next_item = item->getNextItem();

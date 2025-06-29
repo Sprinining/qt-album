@@ -59,6 +59,8 @@ private slots:
 signals:
     // 更新预览列表
     void updatePreviewList(const ProTreeItem *);
+    // 控制下方预览列表选中 item
+    void previewListItemSelected(const ProTreeItem *);
 };
 
 #endif // ANIMATIONWIDGET_H

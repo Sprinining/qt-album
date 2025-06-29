@@ -15,6 +15,7 @@ public:
 private:
     // 预览项计数，用于生成索引
     int item_count_ = 0;
+    int last_index_ = AppConsts::UIConfig::PreviewListMaxLength;
     // 路径到预览项指针的缓存
     QMap<QString, PreviewListItem *> item_cache_;
     QPoint position_;
@@ -25,6 +26,7 @@ private:
 public slots:
     // 接收外部通知更新预览列表，参数为 ProTreeItem 指针
     void onUpdatePreviewList(const ProTreeItem *item);
+    void onPreviewListItemSelected(const ProTreeItem *);
 };
 
 #endif // PREVIEWLISTWIDGET_H

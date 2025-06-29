@@ -36,4 +36,6 @@ void SlideshowDialog::initButtonIcons() {
 void SlideshowDialog::initSignals() {
     connect(ui->widgetAnimation, &AnimationWidget::updatePreviewList,
             ui->listWidget, &PreviewListWidget::onUpdatePreviewList);
+    connect(ui->widgetAnimation, &AnimationWidget::previewListItemSelected,
+            ui->listWidget, &PreviewListWidget::onPreviewListItemSelected);
 }
