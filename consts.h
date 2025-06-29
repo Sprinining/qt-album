@@ -37,6 +37,7 @@ enum class ProjectSource {
 namespace UIConfig {
 constexpr int ProgressWidth = 300;
 constexpr int ProgressMax = 300;
+constexpr int PreviewListItemSize = 80;
 } // namespace UIConfig
 
 } // namespace AppConsts
