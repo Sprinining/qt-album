@@ -29,7 +29,7 @@ private:
     ButtonState current_state_ = ButtonState::Normal;
 
     // 三种状态的图标路径（可选备用）
-    QString normal_, hover_, pressed_;
+    QString normal_path_, hover_path_, pressed_path_;
     // 三种状态图标的图片缓存
     QPixmap pixmap_normal_, pixmap_hover_, pixmap_pressed_;
 

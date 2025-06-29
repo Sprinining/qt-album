@@ -18,20 +18,20 @@ ImageButton::~ImageButton() {}
 // 设置三个状态的图标路径，并加载图片缓存
 void ImageButton::setIcons(const QString &normal, const QString &hover,
                          const QString &pressed) {
-    normal_ = normal;
-    hover_ = hover;
-    pressed_ = pressed;
+    normal_path_ = normal;
+    hover_path_ = hover;
+    pressed_path_ = pressed;
 
     // 加载三张图片
-    pixmap_normal_.load(normal_);
-    pixmap_hover_.load(hover_);
-    pixmap_pressed_.load(pressed_);
+    pixmap_normal_.load(normal_path_);
+    pixmap_hover_.load(hover_path_);
+    pixmap_pressed_.load(pressed_path_);
 
     // 如果正常图加载成功，调整按钮大小匹配图标大小
     if (!pixmap_normal_.isNull()) {
         this->resize(pixmap_normal_.size());
     } else {
-        qWarning() << "Failed to load normal icon:" << normal_;
+        qWarning() << "Failed to load normal icon:" << normal_path_;
     }
 }
 
