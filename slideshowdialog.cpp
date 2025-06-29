@@ -10,9 +10,9 @@ SlideshowDialog::SlideshowDialog(const ProTreeItem *first_item,
     this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 
     initButtonIcons();
+    initSignals();
     ui->widgetAnimation->setPixmap(first_item_);
     ui->widgetAnimation->startAnimation();
-    initSignals();
 }
 
 SlideshowDialog::~SlideshowDialog() { delete ui; }
