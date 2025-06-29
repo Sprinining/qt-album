@@ -28,6 +28,8 @@ void AnimationWidget::setPixmap(const ProTreeItem *item) {
     // 缓存当前图片项，防止重复加载
     if (!item_cache_.contains(path)) {
         item_cache_.insert(path, item);
+        // 发送信号，更新预览列表
+        emit updatePreviewList(item);
     }
 
     // 预加载下一张图片，准备动画渐变
@@ -41,6 +43,7 @@ void AnimationWidget::setPixmap(const ProTreeItem *item) {
     // 缓存下一张图片项
     if (!item_cache_.contains(next_path)) {
         item_cache_.insert(next_path, next_item);
+        emit updatePreviewList(next_item);
     }
 }
 

@@ -12,6 +12,7 @@ SlideshowDialog::SlideshowDialog(const ProTreeItem *first_item,
     initButtonIcons();
     ui->widgetAnimation->setPixmap(first_item_);
     ui->widgetAnimation->startAnimation();
+    initSignals();
 }
 
 SlideshowDialog::~SlideshowDialog() { delete ui; }
@@ -30,4 +31,9 @@ void SlideshowDialog::initButtonIcons() {
     ui->pushButtonPlay->setToggleIcons(":/icons/pause.png",
                                        ":/icons/pause_hover.png",
                                        ":/icons/pause_press.png");
+}
+
+void SlideshowDialog::initSignals() {
+    connect(ui->widgetAnimation, &AnimationWidget::updatePreviewList,
+            ui->listWidget, &PreviewListWidget::onUpdatePreviewList);
 }

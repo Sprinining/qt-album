@@ -24,6 +24,7 @@ private:
     const ProTreeItem *last_item_ = nullptr;
 
     void initButtonIcons();
+    void initSignals();
 };
 
 #endif // SLIDESHOWDIALOG_H

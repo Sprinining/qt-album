@@ -55,6 +55,10 @@ private slots:
     void onTimeout();
     // 停顿定时器超时槽，切换到下一张图片并恢复动画
     void onPauseTimeout();
+
+signals:
+    // 更新预览列表
+    void updatePreviewList(const ProTreeItem *);
 };
 
 #endif // ANIMATIONWIDGET_H
