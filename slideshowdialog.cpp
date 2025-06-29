@@ -39,6 +39,8 @@ void SlideshowDialog::initButtonIcons() {
 }
 
 void SlideshowDialog::initSignals() {
+    connect(ui->pushButtonPlay, &QPushButton::clicked, ui->widgetAnimation,
+            &AnimationWidget::onPlayOrStop);
     connect(ui->pushButtonStop, &QPushButton::clicked, this,
             &SlideshowDialog::close);
     connect(ui->pushButtonPrev, &QPushButton::clicked, this,
@@ -51,6 +53,10 @@ void SlideshowDialog::initSignals() {
             ui->listWidget, &PreviewListWidget::onPreviewListItemSelected);
     connect(ui->listWidget, &PreviewListWidget::showSelectedItem,
             ui->widgetAnimation, &AnimationWidget::onShowSelectedItem);
+    connect(ui->widgetAnimation, &AnimationWidget::animationStarted,
+            ui->pushButtonPlay, &ToggleImageButton::onAnimationStarted);
+    connect(ui->widgetAnimation, &AnimationWidget::animationStopped,
+            ui->pushButtonPlay, &ToggleImageButton::onAnimationStopped);
 }
 
 void SlideshowDialog::onPrevButtonClicked() {

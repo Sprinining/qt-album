@@ -59,6 +59,8 @@ void AnimationWidget::startAnimation() {
     is_initial_pause_ = true; // 表示是初始停顿
 
     pause_timer_->start(700); // 初始停顿 700ms 后开始动画
+
+    emit animationStarted();  // 发射动画开始信号
 }
 
 // 停止动画，停止所有定时器，重置状态，并触发重绘刷新
@@ -69,6 +71,7 @@ void AnimationWidget::stopAnimation() {
     is_animating_ = false;
     is_pause_ = false;
     update();
+    emit animationStopped(); // 发射动画停止信号
 }
 
 // 切换至指定图片项（用于上一张或下一张切换）
@@ -256,4 +259,12 @@ void AnimationWidget::onShowSelectedItem(const QString &path) {
     item_cache_.insert(next_path, next_item); // 同样自动忽略已存在项
 
     update(); // 触发重绘显示图片
+}
+
+void AnimationWidget::onPlayOrStop() {
+    if (is_animating_) {
+        stopAnimation();
+    } else {
+        startAnimation();
+    }
 }

@@ -4,6 +4,7 @@
 #include <QPushButton>
 
 class ToggleImageButton : public QPushButton {
+    Q_OBJECT
 public:
     explicit ToggleImageButton(QWidget *parent = nullptr);
     ~ToggleImageButton();
@@ -38,6 +39,10 @@ private:
 
     // 根据当前状态返回对应图标
     QPixmap currentPixmap() const;
+
+public slots:
+    void onAnimationStarted();
+    void onAnimationStopped();
 };
 
 #endif // TOGGLEIMAGEBUTTON_H

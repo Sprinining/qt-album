@@ -62,12 +62,16 @@ private slots:
 public slots:
     // 展示出预览列表选中的图片
     void onShowSelectedItem(const QString &path);
+    void onPlayOrStop();
 
 signals:
     // 更新预览列表
     void updatePreviewList(const ProTreeItem *);
     // 控制下方预览列表选中 item
     void previewListItemSelected(const ProTreeItem *);
+    // 动画开始或者停止的信号，用于控制开始按钮的显示图标
+    void animationStarted();
+    void animationStopped();
 };
 
 #endif // ANIMATIONWIDGET_H

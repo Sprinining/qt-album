@@ -115,3 +115,15 @@ QPixmap ToggleImageButton::currentPixmap() const {
         }
     }
 }
+
+void ToggleImageButton::onAnimationStarted() {
+    is_toggled_ = true;                   // 表示播放中 -> 显示暂停图组
+    current_state_ = ButtonState::Normal; // 重置状态
+    update();                             // 触发 repaint
+}
+
+void ToggleImageButton::onAnimationStopped() {
+    is_toggled_ = false;                  // 表示已暂停 -> 显示播放图组
+    current_state_ = ButtonState::Normal; // 重置状态
+    update();                             // 触发 repaint
+}

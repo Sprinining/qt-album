@@ -28,6 +28,7 @@ private:
 
     void initButtonIcons();
     void initSignals();
+
 private slots:
     void onPrevButtonClicked();
     void onNextButtonClicked();
