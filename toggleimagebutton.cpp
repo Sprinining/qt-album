@@ -74,32 +74,20 @@ bool ToggleImageButton::event(QEvent *e) {
     return QPushButton::event(e); // 继续传递事件给基类处理
 }
 
-// 自定义绘制函数，重写 QPushButton 的绘制行为
-// 目标：绘制一个圆形裁剪的图标，铺满整个按钮区域
 void ToggleImageButton::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    // 启用抗锯齿，使绘制边缘更加平滑，避免锯齿状边缘
+
+    // 启用抗锯齿，令绘制边缘更平滑，避免锯齿状边缘
     painter.setRenderHint(QPainter::Antialiasing);
 
-    // 获取当前按钮状态对应的图标 QPixmap
+    // 获取当前状态对应的图标图片
     QPixmap pix = currentPixmap();
+    // 如果图片无效（未加载成功），则不绘制，直接返回
     if (pix.isNull())
         return;
 
-    // 创建一个绘图路径，用于限定绘制区域形状
-    QPainterPath path;
-
-    // 向路径中添加一个椭圆，椭圆区域与按钮当前矩形区域（this->rect()）相同
-    // 因为按钮是矩形的，添加的椭圆就是“内切圆”，实现圆形裁剪
-    path.addEllipse(this->rect());
-
-    // 设置 QPainter 的裁剪区域为上面定义的圆形路径
-    // 后续绘图只能在圆形区域内显示，超出圆形部分的内容将被裁剪掉（不显示）
-    painter.setClipPath(path);
-
-    // 将图标绘制到按钮的整个矩形区域（this->rect()），
-    // 图标会根据按钮大小拉伸或缩放，铺满整个按钮
-    // 为了避免变形，传入的图片宽高相等（正方形）
+    // 将图标绘制到按钮的整个矩形区域（this->rect()）
+    // 图片会根据按钮大小自动拉伸或缩放，铺满整个按钮
     painter.drawPixmap(this->rect(), pix);
 }
 
