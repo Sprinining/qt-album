@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,8,1">
    <item>
-    <widget class="PicButton" name="pushButtonPrev">
+    <widget class="ImageButton" name="pushButtonPrev">
      <property name="minimumSize">
       <size>
        <width>50</width>
@@ -50,7 +50,7 @@
     </widget>
    </item>
    <item>
-    <widget class="PicButton" name="pushButtonNext">
+    <widget class="ImageButton" name="pushButtonNext">
      <property name="minimumSize">
       <size>
        <width>50</width>
@@ -72,9 +72,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PicButton</class>
+   <class>ImageButton</class>
    <extends>QPushButton</extends>
-   <header>picbutton.h</header>
+   <header location="global">imagebutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

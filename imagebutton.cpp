@@ -1,10 +1,10 @@
-#include "picbutton.h"
+#include "imagebutton.h"
 #include <QDebug>
 #include <QEvent>
 #include <QPainter>
 #include <QPainterPath>
 
-PicButton::PicButton(QWidget *parent) : QPushButton(parent) {
+ImageButton::ImageButton(QWidget *parent) : QPushButton(parent) {
     // 去除按钮默认边框和背景
     setFlat(true);
     // 禁止聚焦虚线框显示
@@ -13,10 +13,10 @@ PicButton::PicButton(QWidget *parent) : QPushButton(parent) {
     setStyleSheet("background: transparent; border: none;");
 }
 
-PicButton::~PicButton() {}
+ImageButton::~ImageButton() {}
 
 // 设置三个状态的图标路径，并加载图片缓存
-void PicButton::setIcons(const QString &normal, const QString &hover,
+void ImageButton::setIcons(const QString &normal, const QString &hover,
                          const QString &pressed) {
     normal_ = normal;
     hover_ = hover;
@@ -36,7 +36,7 @@ void PicButton::setIcons(const QString &normal, const QString &hover,
 }
 
 // 事件处理函数，监听鼠标状态变化切换按钮状态，并触发重绘
-bool PicButton::event(QEvent *e) {
+bool ImageButton::event(QEvent *e) {
     switch (e->type()) {
     case QEvent::Enter: // 鼠标进入
         current_state_ = ButtonState::Hover;
@@ -61,7 +61,7 @@ bool PicButton::event(QEvent *e) {
 }
 
 // 根据当前状态返回对应的图标 QPixmap
-QPixmap PicButton::currentPixmap() const {
+QPixmap ImageButton::currentPixmap() const {
     switch (current_state_) {
     case ButtonState::Hover:
         return pixmap_hover_;
@@ -75,9 +75,7 @@ QPixmap PicButton::currentPixmap() const {
 
 // 自定义绘制函数，重写 QPushButton 的绘制行为
 // 目标：绘制一个圆形裁剪的图标，铺满整个按钮区域
-void PicButton::paintEvent(QPaintEvent *event) {
-    // Q_UNUSED 用于告诉编译器参数 event 未使用，避免警告
-    Q_UNUSED(event);
+void ImageButton::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     // 启用抗锯齿，使绘制边缘更加平滑，避免锯齿状边缘
     painter.setRenderHint(QPainter::Antialiasing);

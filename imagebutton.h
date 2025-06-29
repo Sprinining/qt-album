@@ -1,15 +1,15 @@
-#ifndef PICBUTTON_H
-#define PICBUTTON_H
+#ifndef IMAGEBUTTON_H
+#define IMAGEBUTTON_H
 
 #include <QPixmap>
 #include <QPushButton>
 
-// PicButton：支持鼠标悬停、按下状态，圆形显示图标的自定义按钮
-class PicButton : public QPushButton {
+// ImageButton：支持鼠标悬停、按下状态，圆形显示图标的自定义按钮
+class ImageButton : public QPushButton {
     Q_OBJECT
 public:
-    explicit PicButton(QWidget *parent = nullptr);
-    ~PicButton();
+    explicit ImageButton(QWidget *parent = nullptr);
+    ~ImageButton();
 
     // 设置三种状态图标的文件路径
     void setIcons(const QString &normal, const QString &hover,
@@ -37,4 +37,4 @@ private:
     QPixmap currentPixmap() const;
 };
 
-#endif // PICBUTTON_H
+#endif // IMAGEBUTTON_H

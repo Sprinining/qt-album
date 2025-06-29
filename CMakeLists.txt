@@ -34,7 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         protreethread.h protreethread.cpp
         removeprodialog.h removeprodialog.cpp removeprodialog.ui
         picshowdialog.h picshowdialog.cpp picshowdialog.ui
-        picbutton.h picbutton.cpp
+        imagebutton.h imagebutton.cpp
         slideshowdialog.h slideshowdialog.cpp slideshowdialog.ui
 
     )
