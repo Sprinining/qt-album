@@ -22,6 +22,7 @@ public slots:
     // 接收项目设置信息的槽函数
     void onProjectSettingChanged(const QString &name, const QString &dir_path);
     void onOpenProject(const QString &dir_path);
+
 signals:
     // 信号接力部分
     // 传递选中的图片的路径
