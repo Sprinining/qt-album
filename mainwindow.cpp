@@ -71,6 +71,8 @@ void MainWindow::initSignals() {
             &ProTreeDialog::nextClicked);
     connect(protree_dialog_, &ProTreeDialog::clearImageRequested,
             pic_show_dialog_, &PicShowDialog::onClearImageRequested);
+    connect(action_music_, &QAction::triggered, protree_dialog_,
+            &ProTreeDialog::setMusic);
 }
 
 void MainWindow::onCreateProject(bool) {

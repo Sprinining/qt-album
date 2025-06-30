@@ -1,7 +1,6 @@
 #ifndef PROTREEDIALOG_H
 #define PROTREEDIALOG_H
 
-#include "protreewidget.h"
 #include <QDialog>
 
 namespace Ui {
@@ -32,6 +31,8 @@ signals:
     void nextClicked();
     // 清除图片区域
     void clearImageRequested();
+    // 设置 bgm
+    void setMusic();
 };
 
 #endif // PROTREEDIALOG_H

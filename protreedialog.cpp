@@ -12,8 +12,10 @@ ProTreeDialog::ProTreeDialog(QWidget *parent)
             &ProTreeWidget::onPreviousClicked);
     connect(this, &ProTreeDialog::nextClicked, ui->treeWidget,
             &ProTreeWidget::onNextClicked);
-    connect(ui->treeWidget, &ProTreeWidget::clearImageRequested,
-            this, &ProTreeDialog::clearImageRequested);
+    connect(ui->treeWidget, &ProTreeWidget::clearImageRequested, this,
+            &ProTreeDialog::clearImageRequested);
+    connect(this, &ProTreeDialog::setMusic, ui->treeWidget,
+            &ProTreeWidget::onSetMusic);
 }
 
 ProTreeDialog::~ProTreeDialog() { delete ui; }
