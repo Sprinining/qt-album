@@ -41,6 +41,8 @@ private:
     bool is_pause_ = false;
     // 是否动画准备阶段（初始停顿）
     bool is_initial_pause_ = true;
+    // 音乐是否已经开始过
+    bool is_music_started_ = false;
 
     // 当前显示图片
     QPixmap from_pixmap_;
@@ -72,6 +74,10 @@ signals:
     // 动画开始或者停止的信号，用于控制开始按钮的显示图标
     void animationStarted();
     void animationStopped();
+    void startMusic();
+    void pauseMusic();
+    void resumeMusic();
+    void stopMusic();
 };
 
 #endif // ANIMATIONWIDGET_H

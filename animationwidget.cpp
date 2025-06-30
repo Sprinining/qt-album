@@ -13,7 +13,7 @@ AnimationWidget::AnimationWidget(QWidget *parent)
     pause_timer_->setSingleShot(true);
 }
 
-AnimationWidget::~AnimationWidget() {}
+AnimationWidget::~AnimationWidget() { emit stopMusic(); }
 
 // 设置当前图片项，加载当前图片和下一张图片，用于动画渐变
 void AnimationWidget::setPixmap(const ProTreeItem *item) {
@@ -60,7 +60,13 @@ void AnimationWidget::startAnimation() {
 
     pause_timer_->start(700); // 初始停顿 700ms 后开始动画
 
-    emit animationStarted();  // 发射动画开始信号
+    emit animationStarted(); // 发射动画开始信号
+    if (!is_music_started_) {
+        emit startMusic();
+        is_music_started_ = true;
+    } else {
+        emit resumeMusic();
+    }
 }
 
 // 停止动画，停止所有定时器，重置状态，并触发重绘刷新
@@ -72,6 +78,7 @@ void AnimationWidget::stopAnimation() {
     is_pause_ = false;
     update();
     emit animationStopped(); // 发射动画停止信号
+    emit pauseMusic();
 }
 
 // 切换至指定图片项（用于上一张或下一张切换）
