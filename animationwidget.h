@@ -74,6 +74,7 @@ signals:
     // 动画开始或者停止的信号，用于控制开始按钮的显示图标
     void animationStarted();
     void animationStopped();
+    // 信号接力
     void startMusic();
     void pauseMusic();
     void resumeMusic();

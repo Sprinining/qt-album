@@ -1,18 +1,22 @@
 #include "protreewidget.h"
+#include "animationwidget.h"
 #include "consts.h"
 #include "protreeitem.h"
 #include "removeprodialog.h"
 #include "slideshowdialog.h"
+#include <QAudioDevice>
 #include <QDebug>
 #include <QDir>
 #include <QFileDialog>
 #include <QGuiApplication>
+#include <QMediaDevices>
 #include <QMenu>
 
 // 传给基类构造函数
 ProTreeWidget::ProTreeWidget(QWidget *parent) : QTreeWidget(parent) {
     // 只初始化一次，节省资源，可以多次复用
     initActions();
+    initMedia();
     initSignals();
 }
 
@@ -55,6 +59,15 @@ void ProTreeWidget::initActions() {
         new QAction(QIcon(":/icons/slideshow.png"), tr("幻灯片播放"), this);
 }
 
+void ProTreeWidget::initMedia() {
+    player_ = new QMediaPlayer(this);
+    player_->setLoops(QMediaPlayer::Infinite);
+    audioOutput_ = new QAudioOutput(this);
+    audioOutput_->setVolume(1.0);
+    player_->setAudioOutput(audioOutput_);
+    playlist_ = new MyMediaPlaylist(this);
+}
+
 void ProTreeWidget::initSignals() {
     // 当用户点击任意 item 时，触发 onItemPressed 处理（用于弹出右键菜单等）
     connect(this, &ProTreeWidget::itemPressed, this,
@@ -73,6 +86,10 @@ void ProTreeWidget::initSignals() {
     // 双击
     connect(this, &QTreeWidget::itemDoubleClicked, this,
             &ProTreeWidget::onItemDoubleClicked);
+
+    // 连接播放列表信号，监听当前索引变更，自动切换播放源
+    connect(playlist_, &MyMediaPlaylist::currentIndexChanged, this,
+            &ProTreeWidget::onCurrentIndexChanged);
 }
 
 void ProTreeWidget::onItemPressed(QTreeWidgetItem *item, int column) {
@@ -197,6 +214,9 @@ void ProTreeWidget::onStartSlideshow() {
 
     slideshow_dialog_ =
         std::make_shared<SlideshowDialog>(first_item, last_item, this);
+    // 连接音频相关的控制信号
+    connectMediaSignals();
+
     slideshow_dialog_->setModal(true);
     // todo: Painter not active
     // slideshow_dialog_->showMaximized();
@@ -245,6 +265,32 @@ void ProTreeWidget::connectThreadSignals() {
 
     connect(thread, &ProTreeThread::totalFileCountCalculated, this,
             &ProTreeWidget::onTotalFileCountCalculated);
+}
+
+void ProTreeWidget::loadMediaFiles(const QStringList &filePaths) {
+    playlist_->clear();
+    for (const QString &file : filePaths)
+        playlist_->addMedia(QUrl::fromLocalFile(file));
+
+    // 设置待播放的第一个文件
+    if (playlist_->mediaCount() > 0)
+        playlist_->setCurrentIndex(0);
+}
+
+void ProTreeWidget::connectMediaSignals() {
+
+    connect(slideshow_dialog_.get(), &SlideshowDialog::startMusic, this,
+            [=]() { player_->play(); });
+    connect(slideshow_dialog_.get(), &SlideshowDialog::pauseMusic, this, [=]() {
+        if (player_->playbackState() == QMediaPlayer::PlayingState)
+            player_->pause();
+    });
+    connect(slideshow_dialog_.get(), &SlideshowDialog::resumeMusic, this, [=]() {
+        if (player_->playbackState() == QMediaPlayer::PausedState)
+            player_->play();
+    });
+    connect(slideshow_dialog_.get(), &SlideshowDialog::stopMusic, this,
+            [=]() { player_->stop(); });
 }
 
 void ProTreeWidget::openProject(const QString &dir_path) {
@@ -345,4 +391,31 @@ void ProTreeWidget::onNextClicked() {
         return;
     emit imagePathSelected(next_item->getFilePath());
     selected_item_ = next_item;
+}
+
+void ProTreeWidget::onCurrentIndexChanged(int index) {
+    QUrl mediaUrl = playlist_->currentMedia();
+    if (!mediaUrl.isEmpty()) {
+        player_->setSource(mediaUrl);
+        player_->play();
+        qDebug() << "开始播放索引：" << index << ", 文件："
+                 << mediaUrl.toLocalFile();
+    }
+}
+
+void ProTreeWidget::onSetMusic() {
+    QFileDialog fileDialog(this);
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    fileDialog.setWindowTitle(tr("选择音频文件"));
+    fileDialog.setViewMode(QFileDialog::Detail);
+    fileDialog.setNameFilter(tr("音频文件 (*.mp3)"));
+
+    if (fileDialog.exec() != QDialog::Accepted)
+        return;
+
+    QStringList files = fileDialog.selectedFiles();
+    if (files.isEmpty())
+        return;
+
+    loadMediaFiles(files);
 }

@@ -32,6 +32,13 @@ private:
 private slots:
     void onPrevButtonClicked();
     void onNextButtonClicked();
+
+signals:
+    // 信号接力
+    void startMusic();
+    void pauseMusic();
+    void resumeMusic();
+    void stopMusic();
 };
 
 #endif // SLIDESHOWDIALOG_H

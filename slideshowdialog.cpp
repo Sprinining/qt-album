@@ -57,6 +57,15 @@ void SlideshowDialog::initSignals() {
             ui->pushButtonPlay, &ToggleImageButton::onAnimationStarted);
     connect(ui->widgetAnimation, &AnimationWidget::animationStopped,
             ui->pushButtonPlay, &ToggleImageButton::onAnimationStopped);
+    // 信号接力
+    connect(ui->widgetAnimation, &AnimationWidget::startMusic, this,
+            &SlideshowDialog::startMusic);
+    connect(ui->widgetAnimation, &AnimationWidget::pauseMusic, this,
+            &SlideshowDialog::pauseMusic);
+    connect(ui->widgetAnimation, &AnimationWidget::resumeMusic, this,
+            &SlideshowDialog::resumeMusic);
+    connect(ui->widgetAnimation, &AnimationWidget::stopMusic, this,
+            &SlideshowDialog::stopMusic);
 }
 
 void SlideshowDialog::onPrevButtonClicked() {

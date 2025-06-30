@@ -1,8 +1,11 @@
 #ifndef PROTREEWIDGET_H
 #define PROTREEWIDGET_H
 
+#include "mymediaplaylist.h"
 #include "protreethread.h"
 #include <QAction>
+#include <QAudioOutput>
+#include <QMediaPlayer>
 #include <QProgressDialog>
 #include <QTreeWidget>
 
@@ -33,8 +36,15 @@ private:
     QProgressDialog *dialog_progress_ = nullptr;
     std::shared_ptr<ProTreeThread> thread_create_pro_;
     std::shared_ptr<SlideshowDialog> slideshow_dialog_;
+    // 多媒体播放器对象，负责解码和控制媒体播放（音频/视频）
+    QMediaPlayer *player_ = nullptr;
+    // 音频输出设备，负责将音频数据发送到系统硬件，控制音量、设备等
+    QAudioOutput *audioOutput_ = nullptr;
+    // 自定义媒体播放列表，用于管理一系列媒体文件的顺序播放
+    MyMediaPlaylist *playlist_ = nullptr;
 
     void initActions();
+    void initMedia();
     void initSignals();
     // 弹出目录选择对话框，返回用户选中的导入路径（若取消则返回空字符串）
     QString selectImportDirectory(const QString &initial_path);
@@ -42,6 +52,9 @@ private:
     void showProgressDialog();
     // 连接导入线程的信号与当前 ProTreeWidget 的槽函数
     void connectThreadSignals();
+    // 加载音频文件
+    void loadMediaFiles(const QStringList &filePaths);
+    void connectMediaSignals();
 
 private slots:
     // 用户点击树控件中的某一项时触发（用于处理右键菜单等）
@@ -64,9 +77,13 @@ private slots:
     void onTotalFileCountCalculated(int total);
     // 双击响应
     void onItemDoubleClicked(QTreeWidgetItem *item, int column);
+
 public slots:
     void onPreviousClicked();
     void onNextClicked();
+    // 播放的音频变化
+    void onCurrentIndexChanged(int index);
+    void onSetMusic();
 
 signals:
     // 用户提前取消了进度
