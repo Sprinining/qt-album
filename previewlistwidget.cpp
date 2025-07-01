@@ -64,11 +64,9 @@ void PreviewListWidget::addListItem(const QString &path) {
     painter.drawPixmap(x, y, scaled_pixmap);
     painter.end(); // 显式结束绘制，释放资源
 
-    ++item_count_; // 预览项计数加一
-
     // 创建新的预览列表项，传入索引、图标和路径，父控件为 this
     PreviewListItem *preview_list_item =
-        new PreviewListItem(item_count_, QIcon(dest_pixmap), path, this);
+        new PreviewListItem(QIcon(dest_pixmap), path, this);
 
     // 设置列表项大小提示，控制显示尺寸
     preview_list_item->setSizeHint(
@@ -77,10 +75,6 @@ void PreviewListWidget::addListItem(const QString &path) {
 
     // 缓存该项，避免重复添加
     item_cache_.insert(path, preview_list_item);
-
-    // 记录控件首次添加项时的位置
-    if (item_count_ == 1)
-        position_ = this->pos();
 }
 
 // 槽函数：更新预览列表，传入 ProTreeItem 指针
@@ -109,20 +103,10 @@ void PreviewListWidget::onPreviewListItemSelected(const ProTreeItem *item) {
         return;
 
     PreviewListItem *preview_item = it.value();
-    int index = preview_item->getIndex();
-
-    if (index > AppConsts::UIConfig::PreviewListMaxLength) {
-        int offset =
-            (index - last_index_) * AppConsts::UIConfig::PreviewListItemSize;
-        QPoint current_pos = this->pos();
-        this->move(current_pos.x() - offset, current_pos.y());
-    } else {
-        this->move(position_);
-        last_index_ = AppConsts::UIConfig::PreviewListMaxLength;
-    }
 
     // 设置选中项
     this->setCurrentItem(preview_item);
+    this->scrollToItem(preview_item, QAbstractItemView::PositionAtCenter);
 }
 
 void PreviewListWidget::onItemPressed(QListWidgetItem *item) {
