@@ -7,7 +7,7 @@ SlideshowDialog::SlideshowDialog(const ProTreeItem *first_item,
     : QDialog(parent), ui(new Ui::SlideshowDialog()), first_item_(first_item),
     last_item_(last_item) {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 
     initButtonIcons();
     initSignals();
