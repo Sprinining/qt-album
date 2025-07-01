@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/bulm.ico</file>
         <file>icons/close.png</file>
         <file>icons/closeshow.png</file>
         <file>icons/closeshow_hover.png</file>
@@ -27,7 +26,6 @@
         <file>icons/previous_hover.png</file>
         <file>icons/previous_press.png</file>
         <file>icons/right.png</file>
-        <file>icons/show.jpg</file>
         <file>icons/slideshow.png</file>
         <file>icons/album.png</file>
     </qresource>
