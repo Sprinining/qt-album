@@ -1,126 +1,79 @@
+/* === 主窗口与菜单 === */
 MainWindow {
-    background-color:rgb(46,47,48);
+    background-color: rgb(46,47,48);
 }
 
-QMenuBar{
-    color:rgb(231,231,231);
-    background-color:rgb(46,47,48);
-}
-
-QMenu{
-    color:rgb(231,231,231);
-    background-color:rgb(55,55,55);
+QMenuBar {
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
 }
 
 QMenuBar::item:selected {
-        background-color:rgb(80,80,80);
+    background-color: rgb(80,80,80);
+}
+
+QMenu {
+    color: rgb(231,231,231);
+    background-color: rgb(55,55,55);
 }
 
 QMenu::item:selected {
-    background-color:rgb(39,96,154);
+    background-color: rgb(39,96,154);
 }
 
+/* === 各类对话框样式 === */
 ProTreeDialog {
-    border-color: #9F9F9F;
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
+    border: 1px solid #9F9F9F;
     padding-right: 10px;
 }
 
 PicShowDialog {
-    border-color: #9F9F9F;
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
+    border: 1px solid #9F9F9F;
     padding: 10px;
     background: rgb(64,66,68);
 }
 
+SlideShowDialog, SlideshowDialog {
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
+}
+
+/* === QWizard 页面 === */
 QWizard {
-    color:rgb(231,231,231);
-    background-color:rgb(46,47,48);
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
 }
 
 QWizard QLabel#tips {
     color: red;
 }
 
+/* === 树视图（工程结构） === */
 QTreeView {
-    color:rgb(231,231,231);
-    background-color:rgb(46,47,48);
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
     border: 0px;
 }
 
-QTreeView::item:hover {
-    background: rgb(38, 95, 153);
-}
-
+QTreeView::item:hover,
 QTreeView::item:selected {
     background: rgb(38, 95, 153);
 }
 
 #TreeProActiveItem {
-    font-weight:bold;
-}
-
-QTreeView::branch:open:has-children:!has-siblings,
-QTreeView::branch:open:has-children:has-siblings
-{image: url(:/icon/down.png);}
-
-QTreeView::branch:closed:has-children:!has-siblings,
-QTreeView::branch:closed:has-children:has-siblings
-{image: url(:/icon/right.png);}
-
-SlideShowDialog {
-    color:rgb(231,231,231);
-    background-color:rgb(46,47,48);
-}
-
-#listWidget {
-    color:rgb(231,231,231);
-    background-color:rgb(46,47,48);
-    border: 0px;
-}
-
-#listWidget::item:hover {
-    background: rgb(38, 95, 153);
-}
-
-#listWidget::item:selected {
-    background: rgb(38, 95, 153);
-}
-
-#pushButtonPrev,#pushButtonNext,#pushButtonPlay, #pushButtonStop {
-    border: 0px;
-}
-
-#widgetSlideshowNext {
-    margin-left:10px;
-}
-
-#widgetSlideshowPrev{
-    margin-right:10px;
-}
-
-#listWidget::item:selected:active{
-    border: 2px solid #FFFFFF;
-}
-
-#listWidget::item:selected{
-    border: 2px solid #FFFFFF;
-}
-
-QHeaderView::section {
-    background-color: #2e2f30;
-    color: #e7e7e7;
     font-weight: bold;
-    border: 1px solid #444;
-    padding: 4px;
 }
 
-SlideshowDialog {
-    color: rgb(231,231,231);
-    background-color: rgb(46,47,48);
+/* 展开/收起图标 */
+QTreeView::branch:open:has-children {
+    image: url(:/icon/down.png);
 }
+
+QTreeView::branch:closed:has-children {
+    image: url(:/icon/right.png);
+}
+
+/* === 幻灯片界面结构 === */
 
 /* 播放按钮区和幻灯片主区背景同色，看作整体 */
 #widgetSlideshowButtons, #widgetSlideshow {
@@ -133,6 +86,14 @@ SlideshowDialog {
 /* 左右切换按钮区背景与主区统一 */
 #widgetSlideshowPrev, #widgetSlideshowNext {
     background-color: rgb(46,47,48);
+}
+
+#widgetSlideshowPrev {
+    margin-right: 10px;
+}
+
+#widgetSlideshowNext {
+    margin-left: 10px;
 }
 
 /* 幻灯片动画展示区稍微亮一点，边框区分 */
@@ -150,22 +111,19 @@ SlideshowDialog {
 }
 
 /* 预览图列表风格 */
-#listWidget {
+#previewListWidget {
     color: rgb(231,231,231);
     background-color: rgb(46,47,48);
     border: none;
 }
 
-#listWidget::item:hover {
+#previewListWidget::item:hover {
     background: rgb(38, 95, 153);
 }
 
-#listWidget::item:selected {
+#previewListWidget::item:selected,
+#previewListWidget::item:selected:active {
     background: rgb(38, 95, 153);
-    border: 2px solid #FFFFFF;
-}
-
-#listWidget::item:selected:active {
     border: 2px solid #FFFFFF;
 }
 
@@ -175,11 +133,11 @@ SlideshowDialog {
     background-color: transparent;
 }
 
-/* 左右切换按钮的间距 */
-#widgetSlideshowPrev {
-    margin-right: 10px;
-}
-
-#widgetSlideshowNext {
-    margin-left: 10px;
+/* === 表头 === */
+QHeaderView::section {
+    background-color: #2e2f30;
+    color: #e7e7e7;
+    font-weight: bold;
+    border: 1px solid #444;
+    padding: 4px;
 }

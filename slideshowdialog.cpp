@@ -53,10 +53,10 @@ void SlideshowDialog::initSignals() {
     connect(ui->pushButtonNext, &QPushButton::clicked, this,
             &SlideshowDialog::onNextButtonClicked);
     connect(ui->widgetAnimation, &AnimationWidget::updatePreviewList,
-            ui->listWidget, &PreviewListWidget::onUpdatePreviewList);
+            ui->previewListWidget, &PreviewListWidget::onUpdatePreviewList);
     connect(ui->widgetAnimation, &AnimationWidget::previewListItemSelected,
-            ui->listWidget, &PreviewListWidget::onPreviewListItemSelected);
-    connect(ui->listWidget, &PreviewListWidget::showSelectedItem,
+            ui->previewListWidget, &PreviewListWidget::onPreviewListItemSelected);
+    connect(ui->previewListWidget, &PreviewListWidget::showSelectedItem,
             ui->widgetAnimation, &AnimationWidget::onShowSelectedItem);
     connect(ui->widgetAnimation, &AnimationWidget::animationStarted,
             ui->pushButtonPlay, &ToggleImageButton::onAnimationStarted);
