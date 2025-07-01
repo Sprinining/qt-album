@@ -112,7 +112,7 @@ QTreeView::branch:closed:has-children {
 
 /* 预览图列表风格 */
 #previewListWidget {
-    color: rgb(231,231,231);
+    color: rgb(46,47,48);
     background-color: rgb(46,47,48);
     border: none;
 }
@@ -124,7 +124,8 @@ QTreeView::branch:closed:has-children {
 #previewListWidget::item:selected,
 #previewListWidget::item:selected:active {
     background: rgb(38, 95, 153);
-    border: 2px solid #FFFFFF;
+    outline: 2px solid #FFFFFF;
+    border: none;
 }
 
 /* 控制按钮无边框透明 */

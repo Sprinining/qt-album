@@ -20,6 +20,7 @@ private:
     QMap<QString, PreviewListItem *> item_cache_;
     QPoint position_;
 
+    void initUI();
     // 添加一个新预览项，传入图片路径
     void addListItem(const QString &path);
 

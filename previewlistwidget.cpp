@@ -6,14 +6,7 @@
 
 // 构造函数，初始化 QListWidget，设置视图模式、图标大小和间距
 PreviewListWidget::PreviewListWidget(QWidget *parent) : QListWidget(parent) {
-    setWrapping(false); // 禁止自动换行
-    setFlow(QListView::LeftToRight);
-    setResizeMode(QListView::Adjust);
-    setViewMode(QListWidget::IconMode); // 图标视图模式
-    setIconSize(QSize(AppConsts::UIConfig::PreviewListItemSize,
-                      AppConsts::UIConfig::PreviewListItemSize)); // 设置图标大小
-    setSpacing(5);                                                // 设置图标间距
-
+    initUI();
     connect(this, &PreviewListWidget::itemPressed, this,
             &PreviewListWidget::onItemPressed);
 }
@@ -22,6 +15,23 @@ PreviewListWidget::PreviewListWidget(QWidget *parent) : QListWidget(parent) {
 // QListWidget 会自动管理 QListWidgetItem 的内存，无需手动删除
 // item_cache_ 只是保存指针，方便快速查找，不拥有所有权
 PreviewListWidget::~PreviewListWidget() { item_cache_.clear(); }
+
+void PreviewListWidget::initUI() {
+    setWrapping(false); // 禁止自动换行，只显示一行，超出内容不自动换行
+    setFlow(QListView::LeftToRight); // 项目从左到右排列（横向流）
+    setResizeMode(
+        QListView::
+        Adjust); // 调整模式：控件大小变化时自动调整项布局（比固定模式更灵活）
+    setViewMode(QListWidget::IconMode); // 设置为图标模式（非默认的列表模式）
+    setIconSize(QSize(
+        AppConsts::UIConfig::PreviewListItemSize,
+        AppConsts::UIConfig::PreviewListItemSize)); // 设置每项图标的显示尺寸
+    setSpacing(5); // 设置项之间的水平/垂直间距（图标之间的间隙）
+    setHorizontalScrollBarPolicy(
+        Qt::ScrollBarAlwaysOff); // 禁止显示水平滚动条，防止占用空间
+    setVerticalScrollBarPolicy(
+        Qt::ScrollBarAlwaysOff); // 禁止显示垂直滚动条，避免因横向滚动条占位而误触发
+}
 
 // 添加一个预览列表项，传入图片路径
 void PreviewListWidget::addListItem(const QString &path) {
@@ -39,7 +49,7 @@ void PreviewListWidget::addListItem(const QString &path) {
     // 创建目标 pixmap 作为背景，带透明灰色填充
     QPixmap dest_pixmap(AppConsts::UIConfig::PreviewListItemSize,
                         AppConsts::UIConfig::PreviewListItemSize);
-    dest_pixmap.fill(QColor(220, 220, 220, 50));
+    dest_pixmap.fill(QColor(46, 47, 48));
 
     // 在目标 pixmap 居中绘制缩放后的图片
     QPainter painter(&dest_pixmap);
