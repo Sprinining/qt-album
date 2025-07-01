@@ -1,0 +1,185 @@
+MainWindow {
+    background-color:rgb(46,47,48);
+}
+
+QMenuBar{
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+}
+
+QMenu{
+    color:rgb(231,231,231);
+    background-color:rgb(55,55,55);
+}
+
+QMenuBar::item:selected {
+        background-color:rgb(80,80,80);
+}
+
+QMenu::item:selected {
+    background-color:rgb(39,96,154);
+}
+
+ProTreeDialog {
+    border-color: #9F9F9F;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    padding-right: 10px;
+}
+
+PicShowDialog {
+    border-color: #9F9F9F;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    padding: 10px;
+    background: rgb(64,66,68);
+}
+
+QWizard {
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+}
+
+QWizard QLabel#tips {
+    color: red;
+}
+
+QTreeView {
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+    border: 0px;
+}
+
+QTreeView::item:hover {
+    background: rgb(38, 95, 153);
+}
+
+QTreeView::item:selected {
+    background: rgb(38, 95, 153);
+}
+
+#TreeProActiveItem {
+    font-weight:bold;
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings
+{image: url(:/icon/down.png);}
+
+QTreeView::branch:closed:has-children:!has-siblings,
+QTreeView::branch:closed:has-children:has-siblings
+{image: url(:/icon/right.png);}
+
+SlideShowDialog {
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+}
+
+#listWidget {
+    color:rgb(231,231,231);
+    background-color:rgb(46,47,48);
+    border: 0px;
+}
+
+#listWidget::item:hover {
+    background: rgb(38, 95, 153);
+}
+
+#listWidget::item:selected {
+    background: rgb(38, 95, 153);
+}
+
+#pushButtonPrev,#pushButtonNext,#pushButtonPlay, #pushButtonStop {
+    border: 0px;
+}
+
+#widgetSlideshowNext {
+    margin-left:10px;
+}
+
+#widgetSlideshowPrev{
+    margin-right:10px;
+}
+
+#listWidget::item:selected:active{
+    border: 2px solid #FFFFFF;
+}
+
+#listWidget::item:selected{
+    border: 2px solid #FFFFFF;
+}
+
+QHeaderView::section {
+    background-color: #2e2f30;
+    color: #e7e7e7;
+    font-weight: bold;
+    border: 1px solid #444;
+    padding: 4px;
+}
+
+SlideshowDialog {
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
+}
+
+/* 播放按钮区和幻灯片主区背景同色，看作整体 */
+#widgetSlideshowButtons, #widgetSlideshow {
+    background-color: rgb(46,47,48);
+    border: none;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+/* 左右切换按钮区背景与主区统一 */
+#widgetSlideshowPrev, #widgetSlideshowNext {
+    background-color: rgb(46,47,48);
+}
+
+/* 幻灯片动画展示区稍微亮一点，边框区分 */
+#widgetAnimation {
+    background-color: rgb(64,66,68);
+    border: 1px solid #9F9F9F;
+    border-radius: 6px;
+}
+
+/* 预览区背景色比上面深一点，形成分区 */
+#widgetPreview {
+    background-color: rgb(54,56,58);
+    border-top: 1px solid #6A6A6A;
+    padding: 6px 0;
+}
+
+/* 预览图列表风格 */
+#listWidget {
+    color: rgb(231,231,231);
+    background-color: rgb(46,47,48);
+    border: none;
+}
+
+#listWidget::item:hover {
+    background: rgb(38, 95, 153);
+}
+
+#listWidget::item:selected {
+    background: rgb(38, 95, 153);
+    border: 2px solid #FFFFFF;
+}
+
+#listWidget::item:selected:active {
+    border: 2px solid #FFFFFF;
+}
+
+/* 控制按钮无边框透明 */
+#pushButtonPrev, #pushButtonNext, #pushButtonPlay, #pushButtonStop {
+    border: 0;
+    background-color: transparent;
+}
+
+/* 左右切换按钮的间距 */
+#widgetSlideshowPrev {
+    margin-right: 10px;
+}
+
+#widgetSlideshowNext {
+    margin-left: 10px;
+}

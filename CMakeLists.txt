@@ -41,6 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         previewlistwidget.h previewlistwidget.cpp
         previewlistitem.h previewlistitem.cpp
         mymediaplaylist.h mymediaplaylist.cpp
+        style.qrc
 
     )
 # Define target properties for Android with Qt 6 as:
