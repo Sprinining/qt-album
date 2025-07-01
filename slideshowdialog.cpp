@@ -19,6 +19,7 @@ SlideshowDialog::~SlideshowDialog() { delete ui; }
 
 void SlideshowDialog::closeEvent(QCloseEvent *event) {
     ui->widgetAnimation->stopAnimation(); // 安全释放动画资源
+    emit stopMusic();                      // 发出音乐停止信号
     QDialog::closeEvent(event);           // 保留默认行为
 }
 

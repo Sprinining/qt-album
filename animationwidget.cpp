@@ -13,7 +13,7 @@ AnimationWidget::AnimationWidget(QWidget *parent)
     pause_timer_->setSingleShot(true);
 }
 
-AnimationWidget::~AnimationWidget() { emit stopMusic(); }
+AnimationWidget::~AnimationWidget() {}
 
 // 设置当前图片项，加载当前图片和下一张图片，用于动画渐变
 void AnimationWidget::setPixmap(const ProTreeItem *item) {
