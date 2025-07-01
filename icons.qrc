@@ -29,5 +29,6 @@
         <file>icons/right.png</file>
         <file>icons/show.jpg</file>
         <file>icons/slideshow.png</file>
+        <file>icons/album.png</file>
     </qresource>
 </RCC>

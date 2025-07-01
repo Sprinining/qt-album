@@ -62,6 +62,10 @@ else()
     endif()
 endif()
 
+if(WIN32)
+    target_sources(album PRIVATE app_icon.rc)
+endif()
+
 target_link_libraries(album PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Multimedia

@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
         QString styleSheet = QString::fromUtf8(file.readAll());
         a.setStyleSheet(styleSheet);
     }
+    w.setWindowIcon(QIcon(":/icons/album.png"));
     w.show();
     return a.exec();
 }
