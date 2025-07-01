@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
         a.setStyleSheet(styleSheet);
     }
     w.setWindowIcon(QIcon(":/icons/album.png"));
+    w.setWindowTitle(QObject::tr("相册"));
     w.show();
     return a.exec();
 }
