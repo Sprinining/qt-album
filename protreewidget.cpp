@@ -278,7 +278,6 @@ void ProTreeWidget::loadMediaFiles(const QStringList &filePaths) {
 }
 
 void ProTreeWidget::connectMediaSignals() {
-
     connect(slideshow_dialog_.get(), &SlideshowDialog::startMusic, this,
             [=]() { player_->play(); });
     connect(slideshow_dialog_.get(), &SlideshowDialog::pauseMusic, this, [=]() {
@@ -397,9 +396,6 @@ void ProTreeWidget::onCurrentIndexChanged(int index) {
     QUrl mediaUrl = playlist_->currentMedia();
     if (!mediaUrl.isEmpty()) {
         player_->setSource(mediaUrl);
-        player_->play();
-        qDebug() << "开始播放索引：" << index << ", 文件："
-                 << mediaUrl.toLocalFile();
     }
 }
 
