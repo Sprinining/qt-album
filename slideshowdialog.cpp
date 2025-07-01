@@ -12,14 +12,18 @@ SlideshowDialog::SlideshowDialog(const ProTreeItem *first_item,
     initButtonIcons();
     initSignals();
     ui->widgetAnimation->setPixmap(first_item_);
-    ui->widgetAnimation->startAnimation();
 }
 
 SlideshowDialog::~SlideshowDialog() { delete ui; }
 
+void SlideshowDialog::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+    ui->widgetAnimation->startAnimation();
+}
+
 void SlideshowDialog::closeEvent(QCloseEvent *event) {
     ui->widgetAnimation->stopAnimation(); // 安全释放动画资源
-    emit stopMusic();                      // 发出音乐停止信号
+    emit stopMusic();                     // 发出音乐停止信号
     QDialog::closeEvent(event);           // 保留默认行为
 }
 
