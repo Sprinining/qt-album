@@ -15,7 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,7,1">
    <item>
-    <widget class="QWidget" name="widget_2" native="true">
+    <widget class="QWidget" name="widgetSlideshowButtons" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <spacer name="horizontalSpacer">
@@ -78,13 +90,13 @@
        <widget class="QWidget" name="widgetSlideshowPrev" native="true">
         <property name="minimumSize">
          <size>
-          <width>80</width>
+          <width>40</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>80</width>
+          <width>40</width>
           <height>16777215</height>
          </size>
         </property>
@@ -125,13 +137,13 @@
        <widget class="QWidget" name="widgetSlideshowNext" native="true">
         <property name="minimumSize">
          <size>
-          <width>80</width>
+          <width>40</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>80</width>
+          <width>40</width>
           <height>16777215</height>
          </size>
         </property>
@@ -165,49 +177,25 @@
     <widget class="QWidget" name="widgetPreview" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QWidget" name="widget" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="PreviewListWidget" name="listWidget">
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>120</height>
+          <height>100</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>120</height>
+          <height>100</height>
          </size>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="PreviewListWidget" name="listWidget">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="flow">
-            <enum>QListView::Flow::LeftToRight</enum>
-           </property>
-           <property name="viewMode">
-            <enum>QListView::ViewMode::IconMode</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <property name="flow">
+         <enum>QListView::Flow::LeftToRight</enum>
+        </property>
+        <property name="viewMode">
+         <enum>QListView::ViewMode::IconMode</enum>
+        </property>
        </widget>
       </item>
      </layout>
