@@ -115,7 +115,8 @@ void AnimationWidget::slideNext() {
 void AnimationWidget::paintEvent(QPaintEvent *) {
     // 第1步：创建绘图对象，准备在控件上绘制
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
     // 第2步：获取控件宽高
     int widget_width = width();
@@ -129,7 +130,8 @@ void AnimationWidget::paintEvent(QPaintEvent *) {
 
     // 第4-from：缩放当前图片，保持宽高比
     QPixmap scaled_current_pixmap =
-        from_pixmap_.scaled(widget_width, widget_height, Qt::KeepAspectRatio);
+        from_pixmap_.scaled(widget_width, widget_height, Qt::KeepAspectRatio,
+                                                        Qt::SmoothTransformation);
 
     // 第5-from：计算当前图片透明度，blend_factor_ 从 0 到 1，透明度从 255 变到 0
     int alpha_current = static_cast<int>(255 * (1.0f - blend_factor_));
@@ -141,6 +143,7 @@ void AnimationWidget::paintEvent(QPaintEvent *) {
     // 第7-from：绘制当前图片并加透明度遮罩
     {
         QPainter current_painter(&current_pixmap_with_alpha);
+        current_painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
         current_painter.setCompositionMode(QPainter::CompositionMode_Source);
         current_painter.drawPixmap(0, 0, scaled_current_pixmap);
         current_painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
@@ -164,7 +167,8 @@ void AnimationWidget::paintEvent(QPaintEvent *) {
 
     // 第4-to：缩放下一张图片，保持宽高比
     QPixmap scaled_next_pixmap =
-        to_pixmap_.scaled(widget_width, widget_height, Qt::KeepAspectRatio);
+        to_pixmap_.scaled(widget_width, widget_height, Qt::KeepAspectRatio,
+                                                   Qt::SmoothTransformation);
 
     // 第5-to：计算下一张图片透明度，blend_factor_ 从 0 到 1，透明度从 0 变到 255
     int alpha_next = static_cast<int>(255 * blend_factor_);
@@ -176,6 +180,7 @@ void AnimationWidget::paintEvent(QPaintEvent *) {
     // 第7-to：绘制下一张图片并加透明度遮罩
     {
         QPainter next_painter(&next_pixmap_with_alpha);
+        next_painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
         next_painter.setCompositionMode(QPainter::CompositionMode_Source);
         next_painter.drawPixmap(0, 0, scaled_next_pixmap);
         next_painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
