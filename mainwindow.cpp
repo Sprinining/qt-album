@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMenu>
+#include <QSplitter>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -49,10 +51,17 @@ void MainWindow::initActions() {
 // 初始化项目树对话框
 void MainWindow::initDialog() {
     protree_dialog_ = new ProTreeDialog(this);
-    ui->verticalLayoutPro->addWidget(protree_dialog_);
-
     pic_show_dialog_ = new PicShowDialog(this);
-    ui->verticalLayoutPic->addWidget(pic_show_dialog_);
+
+    // 添加进 splitter
+    splitter_ = new QSplitter(Qt::Horizontal, this);
+    splitter_->addWidget(protree_dialog_);
+    splitter_->addWidget(pic_show_dialog_);
+
+    // 设置为主窗口中心部件
+    this->setCentralWidget(splitter_);
+    // 设置初始尺寸比例，{3, 10} 会因为数字太小不生效
+    splitter_->setSizes({300, 1000});
 }
 
 void MainWindow::initSignals() {

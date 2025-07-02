@@ -4,6 +4,7 @@
 #include "picshowdialog.h"
 
 #include <QMainWindow>
+#include <QSplitter>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,6 +27,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    // 分裂器
+    QSplitter *splitter_ = nullptr;
     // 屏幕左侧的项目树对话框
     ProTreeDialog *protree_dialog_ = nullptr;
     // 右侧的图片展示区
